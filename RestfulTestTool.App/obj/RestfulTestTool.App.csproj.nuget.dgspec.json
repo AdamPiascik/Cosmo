@@ -1,0 +1,58 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\adamp\\OneDrive - AVAMAE Software Solutions Ltd\\Sandbox\\RESTfulTestTool\\RestfulTestTool.App\\RestfulTestTool.App.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\adamp\\OneDrive - AVAMAE Software Solutions Ltd\\Sandbox\\RESTfulTestTool\\RestfulTestTool.App\\RestfulTestTool.App.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\adamp\\OneDrive - AVAMAE Software Solutions Ltd\\Sandbox\\RESTfulTestTool\\RestfulTestTool.App\\RestfulTestTool.App.csproj",
+        "projectName": "RestfulTestTool.App",
+        "projectPath": "C:\\Users\\adamp\\OneDrive - AVAMAE Software Solutions Ltd\\Sandbox\\RESTfulTestTool\\RestfulTestTool.App\\RestfulTestTool.App.csproj",
+        "packagesPath": "C:\\Users\\adamp\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\adamp\\OneDrive - AVAMAE Software Solutions Ltd\\Sandbox\\RESTfulTestTool\\RestfulTestTool.App\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\adamp\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp2.2"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp2.2": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp2.2": {
+          "dependencies": {
+            "Microsoft.NETCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    }
+  }
+}
