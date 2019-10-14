@@ -2,6 +2,7 @@
 using RestfulTestTool.Core.Handlers;
 using RestfulTestTool.Core.Types.ResultTypes;
 using RestfulTestTool.TestController;
+using System;
 
 namespace RestfulTestTool.App
 {
@@ -11,7 +12,7 @@ namespace RestfulTestTool.App
         {
             TestConfig testConfig = ConfigHandler.ConfigureTestParameters(args);
 
-            Test test = new Test()
+            Test test = new Test(testConfig)
                             .SetUpTargetAPI()
                             .SetUpSwaggerDocuments()
                             .SetUpAuthDictionaries()

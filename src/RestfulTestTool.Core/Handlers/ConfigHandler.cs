@@ -1,6 +1,7 @@
 using CommandLine;
 using Newtonsoft.Json;
 using RestfulTestTool.Core.Config;
+using RestfulTestTool.Core.Constants;
 using RestfulTestTool.Core.Enums;
 using System;
 using System.IO;
@@ -13,19 +14,33 @@ namespace RestfulTestTool.Core.Handlers
         {
             TestConfig testConfig = new TestConfig();
             Parser.Default.ParseArguments<AppOptions>(args)
-                    .WithParsed(options => ConfigureTest(options, testConfig))
+                    .WithParsed(options => ConfigureTest(options, ref testConfig))
                     .WithNotParsed<AppOptions>((errors) => ErrorHandler.ArgumentParserError(errors));
 
             return testConfig;
         }
 
-        public static void ConfigureTest(AppOptions options, TestConfig testConfig)
+        public static void ConfigureTest(AppOptions options, ref TestConfig testConfig)
         {
             testConfig.Verbose = options.Verbose;
-            ParseConfigFile(options.ConfigFilePath, testConfig);
+
+            if (options.ConfigFilePath != null)
+            {
+                if (File.Exists(options.ConfigFilePath))
+                    ParseConfigFile(options.ConfigFilePath, ref testConfig);
+                else
+                    ErrorHandler.ConfigFileNotFound(options.ConfigFilePath);
+            }
+            else
+            {
+                if (File.Exists(Defaults.ConfigFile))
+                    ParseConfigFile(Defaults.ConfigFile, ref testConfig);
+                else
+                    ErrorHandler.ConfigFileNotFound(Defaults.ConfigFile);
+            }
         }
 
-        public static void ParseConfigFile(string configFilePath, TestConfig testConfig)
+        public static void ParseConfigFile(string configFilePath, ref TestConfig testConfig)
         {
             try
             {
@@ -42,7 +57,7 @@ namespace RestfulTestTool.Core.Handlers
                                           ex.Message);   
             }
 
-            if (!testConfig.HasErrors())
+            if (testConfig.HasErrors())
                 ErrorHandler.InvalidTestConfig(testConfig.Errors);
         }
     }

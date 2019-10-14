@@ -1,0 +1,13 @@
+{
+    "ProjectName": "Horizon Leeds",
+    "URL": "https://horizonleeds-api.dev.avamae.co.uk",
+    "UseLocalServer": false,
+    "LocalPort": 5001,
+    "LocalServerPath": "C:\\Dev Projects\\Horizon Leeds V1.0\\PlatformAPI\\Avamae\\Avamae.API\\Avamae.API.csproj",
+    "SwaggerDocs": [ "v1/doc.json" ],
+    "Environment": "development",
+    "DataFiles": [ "HorizonLeeds.TestData.json" ],
+    "AuthEndpoints": [],
+    "Include": [],
+    "Exclude": []
+}

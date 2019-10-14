@@ -39,6 +39,11 @@ namespace RestfulTestTool.Core.Config
 
         // Config validation
         public IList<ConfigError> Errors { get; set; }
+
+        public TestConfig()
+        {
+            Errors = new List<ConfigError>();
+        }
         public bool HasErrors()
         {
             if (SaveResponses && SimulatedUsers > 1)
@@ -50,9 +55,9 @@ namespace RestfulTestTool.Core.Config
             }
                 
             if (Errors.Any())
-                return false;
-            else
                 return true;
+            else
+                return false;
         }
 
         public void AddConfigError(ConfigErrorType errorType, ErrorLevel errorLevel, string message)

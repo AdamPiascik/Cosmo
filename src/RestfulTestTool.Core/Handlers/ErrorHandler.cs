@@ -35,6 +35,12 @@ namespace RestfulTestTool.Core.Handlers
             }                
         }
 
+        public static void ConfigFileNotFound(string path)
+        {
+            Console.WriteLine($"The config file at {path} was not found. Exiting...");
+            Environment.Exit(1);
+        }
+
         public static void ArgumentParserError(IEnumerable<Error> errs)
         {
             Environment.Exit(160);

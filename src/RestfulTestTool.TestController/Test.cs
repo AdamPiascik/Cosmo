@@ -14,54 +14,37 @@ namespace RestfulTestTool.TestController
 {
     public class Test
     {
-        private const double ConnectionScaleFactor = 1.2;
         public TestConfig Configuration { get; set; }
+        public ApiConnectionFactory ApiConnectionFactory { get; set; }
         public LocalServer LocalServer { get; set; }
         public TestSchedule Schedule { get; set; }
         public IList<SimulatedUser> SimulatedUserList { get; set; }
         public IList<EndpointProbeResult> ListResults { get; set; }
-        
+
+        public Test(TestConfig testconfig)
+        {
+            Configuration = testconfig;
+        }
+
         public Test SetUpTargetAPI()
         {
             TargetAPISetup setup = new TargetAPISetup();
-            bool successfulSetup = false;
-            Uri targetApiUrl = null;
 
             if (Configuration.UseLocalServer)
             {
-                successfulSetup =
-                    setup.TryStartLocalServer(
-                            Configuration.LocalServerPath,
-                            Configuration.LocalPort,
-                            Configuration.Environment,
-                            out LocalServer localServer);
+                setup.TryStartLocalServer(
+                        Configuration.LocalServerPath,
+                        Configuration.LocalPort,
+                        Configuration.Environment,
+                        out LocalServer localServer);
 
-                targetApiUrl = new Uri($"localhost:{Configuration.LocalPort}");
                 LocalServer = localServer;
             }
-            else
-            {
-                try
-                {
-                    targetApiUrl = new Uri(Configuration.URL);
-                }
-                catch (Exception ex)
-                {
-                    setup.Errors.Add(
-                        new SetupError
-                        {
-                            Severity = ErrorLevel.Fatal,
-                            Type = InitialiserErrorType.TargetAPISetup,
-                            Message = ex.Message
-                        });
-                }
-            }
 
-            ServicePointManager
-                .FindServicePoint(targetApiUrl)
-                .ConnectionLimit = Convert.ToInt32(Configuration.SimulatedUsers * ConnectionScaleFactor);
+            ApiConnectionFactory = setup.CreateApiConnectionFactory(Configuration);
+            setup.SetConnectionLimit(Configuration);
 
-            if (!successfulSetup)
+            if (!setup.bSuccessful)
                 ErrorHandler.InitialisationError(ErrorLevel.Fatal,
                                 InitialiserErrorType.TargetAPISetup,
                                 setup.Errors);
@@ -72,22 +55,20 @@ namespace RestfulTestTool.TestController
         public Test SetUpTestSchedule()
         {
             TestScheduleSetup setup = new TestScheduleSetup();
-            bool successfulSetup = false;
 
-            if (!successfulSetup)
+            if (!setup.bSuccessful)
                 ErrorHandler.InitialisationError(ErrorLevel.Fatal,
                                 InitialiserErrorType.TestScheduleSetup,
                                 setup.Errors);
-            
+
             return this;
         }
 
         public Test SetUpSwaggerDocuments()
         {
             SwaggerDocumentSetup setup = new SwaggerDocumentSetup();
-            bool successfulSetup = false;
 
-            if (!successfulSetup)
+            if (!setup.bSuccessful)
                 ErrorHandler.InitialisationError(ErrorLevel.Fatal,
                                 InitialiserErrorType.SwaggerDocumentSetup,
                                 setup.Errors);
@@ -98,9 +79,8 @@ namespace RestfulTestTool.TestController
         public Test SetUpSimulatedUsers()
         {
             SimulatedUserSetup setup = new SimulatedUserSetup();
-            bool successfulSetup = false;
 
-            if (!successfulSetup)
+            if (!setup.bSuccessful)
                 ErrorHandler.InitialisationError(ErrorLevel.Fatal,
                                 InitialiserErrorType.SimulatedUserSetup,
                                 setup.Errors);
@@ -111,9 +91,8 @@ namespace RestfulTestTool.TestController
         public Test SetUpAuthDictionaries()
         {
             AuthDictionarySetup setup = new AuthDictionarySetup();
-            bool successfulSetup = false;
 
-            if (!successfulSetup)
+            if (!setup.bSuccessful)
                 ErrorHandler.InitialisationError(ErrorLevel.Fatal,
                                 InitialiserErrorType.AuthDictionarySetup,
                                 setup.Errors);
@@ -124,9 +103,8 @@ namespace RestfulTestTool.TestController
         public Test SetUpPayloadDictionaries()
         {
             PayloadDictionarySetup setup = new PayloadDictionarySetup();
-            bool successfulSetup = false;
 
-            if (!successfulSetup)
+            if (!setup.bSuccessful)
                 ErrorHandler.InitialisationError(ErrorLevel.Fatal,
                                 InitialiserErrorType.PayloadDictionarySetup,
                                 setup.Errors);
