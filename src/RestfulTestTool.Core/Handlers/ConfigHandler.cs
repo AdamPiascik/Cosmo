@@ -1,7 +1,7 @@
 using CommandLine;
 using Newtonsoft.Json;
 using RestfulTestTool.Core.Config;
-using RestfulTestTool.Core.Constants;
+using RestfulTestTool.Core.Enums;
 using System;
 using System.IO;
 

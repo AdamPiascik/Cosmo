@@ -1,16 +1,11 @@
-using RestfulTestTool.Core.Handlers;
+using RestfulTestTool.Core.Enums;
 
-namespace RestfulTestTool.Core.Types.EndpointTypes
+namespace RestfulTestTool.Core.Types.ErrorTypes
 {
     public class ProbeError
     {
         public ErrorLevel Severity { get; set; }
         public ProbeErrorType Type { get; set; }
         public string Message { get; set; }
-    }
-
-    public enum ProbeErrorType
-    {
-        UnknownPayloadContentType
     }
 }

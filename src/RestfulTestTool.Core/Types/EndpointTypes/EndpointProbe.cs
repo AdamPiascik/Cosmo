@@ -1,4 +1,5 @@
-using RestfulTestTool.Core.Handlers;
+using RestfulTestTool.Core.Enums;
+using RestfulTestTool.Core.Types.ErrorTypes;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;

@@ -1,6 +1,6 @@
 ﻿using RestfulTestTool.Core.Config;
 using RestfulTestTool.Core.Handlers;
-using RestfulTestTool.Core.Types.CoreTypes;
+using RestfulTestTool.TestController;
 
 namespace RestfulTestTool.App
 {

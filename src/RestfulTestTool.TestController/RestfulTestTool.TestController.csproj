@@ -1,5 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemGroup>
+    <ProjectReference Include="..\RestfulTestTool.Core\RestfulTestTool.Core.csproj" />
+    <ProjectReference Include="..\RestfulTestTool.TestInitialiser\RestfulTestTool.TestInitialiser.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>

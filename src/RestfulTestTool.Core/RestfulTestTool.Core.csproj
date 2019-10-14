@@ -12,6 +12,5 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RestfulTestTool.TestInitialiser\RestfulTestTool.TestInitialiser.csproj" />
   </ItemGroup>
 </Project>

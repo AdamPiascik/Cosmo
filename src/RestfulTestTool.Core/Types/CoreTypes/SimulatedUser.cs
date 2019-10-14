@@ -1,5 +1,5 @@
 using RestfulTestTool.Core.Constants;
-using RestfulTestTool.Core.Handlers;
+using RestfulTestTool.Core.Enums;
 using RestfulTestTool.Core.Types.EndpointTypes;
 using System;
 using System.Diagnostics;
