@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace RestfulTestTool.Core.Types.CoreTypes
 {
-    public class SwaggerDoc
+    public class SwaggerDocument
     {
         public string Swagger { get; set; }
         public Info Info { get; set; }

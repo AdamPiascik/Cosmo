@@ -28,7 +28,7 @@ namespace RestfulTestTool.Core.Config
         public List<string> AuthEndpoints { get; set; }
         public List<string> Include { get; set; }
         public List<string> Exclude { get; set; }
-        public List<string> SwaggerDocs { get; set; }
+        public string SwaggerDoc { get; set; }
 
         // Flags
         public bool SavePerformanceData { get; set; } = true;

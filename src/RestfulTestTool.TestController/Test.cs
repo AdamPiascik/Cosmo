@@ -17,13 +17,17 @@ namespace RestfulTestTool.TestController
         public TestConfig Configuration { get; set; }
         public ApiConnectionFactory ApiConnectionFactory { get; set; }
         public LocalServer LocalServer { get; set; }
-        public TestSchedule Schedule { get; set; }
+        public TestSchedule TestSchedule { get; set; }
+        public TestResources TestResources { get; set; }
         public IList<SimulatedUser> SimulatedUserList { get; set; }
-        public IList<EndpointProbeResult> ListResults { get; set; }
+
+        public ResultSet ResultSet { get; set; }
 
         public Test(TestConfig testconfig)
         {
             Configuration = testconfig;
+            SimulatedUserList = new List<SimulatedUser>();
+            TestResources = new TestResources();
         }
 
         public Test SetUpTargetAPI()
@@ -67,6 +71,7 @@ namespace RestfulTestTool.TestController
         public Test SetUpSwaggerDocuments()
         {
             SwaggerDocumentSetup setup = new SwaggerDocumentSetup();
+            TestResources.SwaggerDocument = setup.FetchSwaggerDocument(ApiConnectionFactory, Configuration.SwaggerDoc);
 
             if (!setup.bSuccessful)
                 ErrorHandler.InitialisationError(ErrorLevel.Fatal,
@@ -112,15 +117,13 @@ namespace RestfulTestTool.TestController
             return this;
         }
 
-        public ResultSet Run()
+        public void Run()
         {
-            ResultSet results = new ResultSet();
+            ResultSet = new ResultSet();
 
             Coordinator coordinator = new Coordinator();
 
             // coordinator jobs: assign tasks to users, monitor progress, collect/collate results
-
-            return results;
         }
     }
 }

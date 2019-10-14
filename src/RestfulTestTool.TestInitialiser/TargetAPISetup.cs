@@ -75,9 +75,10 @@ namespace RestfulTestTool.TestInitialiser
             try
             {
                 if (config.UseLocalServer)
-                    TargetApiUrl = new Uri(config.URL);
+                    TargetApiUrl = new Uri($"http://localhost:{config.LocalPort}");                    
                 else
-                    TargetApiUrl = new Uri($"localhost:{config.LocalPort}");                
+                    TargetApiUrl = new Uri(config.URL);
+                               
             }
             catch (Exception ex)
             {

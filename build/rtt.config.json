@@ -4,7 +4,7 @@
     "UseLocalServer": false,
     "LocalPort": 5001,
     "LocalServerPath": "C:\\Dev Projects\\Horizon Leeds V1.0\\PlatformAPI\\Avamae\\Avamae.API\\Avamae.API.csproj",
-    "SwaggerDocs": [ "v1/doc.json" ],
+    "SwaggerDoc": "v1/doc.json",
     "Environment": "development",
     "DataFiles": [ "HorizonLeeds.TestData.json" ],
     "AuthEndpoints": [],

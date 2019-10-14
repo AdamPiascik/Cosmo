@@ -20,9 +20,9 @@ namespace RestfulTestTool.App
                             .SetUpSimulatedUsers()
                             .SetUpTestSchedule();
 
-            ResultSet resultSet = test.Run();
+            test.Run();
 
-            ResultsHandler.HandleResultSet(resultSet);
+            ResultsHandler.HandleResultSet(test.ResultSet);
             
             return 0;
         }
