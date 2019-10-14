@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\RestfulTestTool.Core\RestfulTestTool.Core.csproj" />
+    <ProjectReference Include="..\RestfulTestTool.TestController\RestfulTestTool.TestController.csproj" />
+    <ProjectReference Include="..\RestfulTestTool.TestInitialiser\RestfulTestTool.TestInitialiser.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <NoWarn>$(NoWarn);NU1605</NoWarn>
+  </PropertyGroup>
+
+</Project>
