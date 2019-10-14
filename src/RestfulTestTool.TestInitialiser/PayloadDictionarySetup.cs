@@ -1,3 +1,4 @@
+using RestfulTestTool.Core.Config;
 using RestfulTestTool.Core.Types.ErrorTypes;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,18 @@ namespace RestfulTestTool.TestInitialiser
         public PayloadDictionarySetup()
         {
             Errors = new List<SetupError>();
+        }
+
+        public Dictionary<string, dynamic> GeneratePayloadDictionary(TestConfig config)
+        {
+            Dictionary<string, dynamic> dict = new Dictionary<string, dynamic>();
+
+            if (config.DataFiles.Any())
+            {
+
+            }
+
+            return dict;
         }
     }    
 }

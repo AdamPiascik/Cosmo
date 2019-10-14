@@ -2,8 +2,6 @@ using RestfulTestTool.Core.Config;
 using RestfulTestTool.Core.Enums;
 using RestfulTestTool.Core.Handlers;
 using RestfulTestTool.Core.Types.CoreTypes;
-using RestfulTestTool.Core.Types.EndpointTypes;
-using RestfulTestTool.Core.Types.ErrorTypes;
 using RestfulTestTool.Core.Types.ResultTypes;
 using RestfulTestTool.TestInitialiser;
 using System;
@@ -84,6 +82,7 @@ namespace RestfulTestTool.TestController
         public Test SetUpSimulatedUsers()
         {
             SimulatedUserSetup setup = new SimulatedUserSetup();
+            SimulatedUserList = setup.PopulateUserList(Configuration, ApiConnectionFactory);
 
             if (!setup.bSuccessful)
                 ErrorHandler.InitialisationError(ErrorLevel.Fatal,
@@ -97,6 +96,8 @@ namespace RestfulTestTool.TestController
         {
             AuthDictionarySetup setup = new AuthDictionarySetup();
 
+            TestResources.AuthDictionary = setup.GenerateAuthDictionary(Configuration);
+
             if (!setup.bSuccessful)
                 ErrorHandler.InitialisationError(ErrorLevel.Fatal,
                                 InitialiserErrorType.AuthDictionarySetup,
@@ -108,6 +109,8 @@ namespace RestfulTestTool.TestController
         public Test SetUpPayloadDictionaries()
         {
             PayloadDictionarySetup setup = new PayloadDictionarySetup();
+
+            TestResources.PayloadDictionary = setup.GeneratePayloadDictionary(Configuration);
 
             if (!setup.bSuccessful)
                 ErrorHandler.InitialisationError(ErrorLevel.Fatal,

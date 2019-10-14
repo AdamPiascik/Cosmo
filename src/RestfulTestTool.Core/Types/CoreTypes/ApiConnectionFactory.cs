@@ -17,6 +17,8 @@ namespace RestfulTestTool.Core.Types.CoreTypes
                     Timeout = TimeSpan.FromSeconds(Defaults.RequestTimeoutInSeconds)
                 };
 
+            httpClient.DefaultRequestHeaders.Add("bTestData", new string[] { "1" });
+
             return httpClient;
         }
     }

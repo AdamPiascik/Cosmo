@@ -15,12 +15,6 @@ namespace RestfulTestTool.Core.Types.CoreTypes
         public bool bSavePerformanceData { get; set; }
         public bool bSaveResponses { get; set; }
 
-        public HttpClient SetTargetAPI(string apiUrl)
-        {
-            HttpClient api = new HttpClient { BaseAddress = new Uri(apiUrl) };
-            return api;
-        }
-
         public async void ExecuteProbe(EndpointProbe probe)
         {
             HttpRequestMessage request = new HttpRequestMessage
