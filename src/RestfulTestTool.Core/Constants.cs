@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace RestfulTestTool.Core.Constants
 {
     public class ConfigErrorMessages

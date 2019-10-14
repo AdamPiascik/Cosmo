@@ -1,12 +1,13 @@
 ﻿using RestfulTestTool.Core.Config;
 using RestfulTestTool.Core.Handlers;
+using RestfulTestTool.Core.Types.ResultTypes;
 using RestfulTestTool.TestController;
 
 namespace RestfulTestTool.App
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             TestConfig testConfig = ConfigHandler.ConfigureTestParameters(args);
 
@@ -18,9 +19,11 @@ namespace RestfulTestTool.App
                             .SetUpSimulatedUsers()
                             .SetUpTestSchedule();
 
-            // RunTest;
+            ResultSet resultSet = test.Run();
 
-            // ParseResults;
+            ResultsHandler.HandleResultSet(resultSet);
+            
+            return 0;
         }
     }
 }
