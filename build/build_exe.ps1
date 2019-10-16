@@ -12,5 +12,6 @@ dotnet publish $projectToBuild -r win10-x64 -c Release -o $publishDir --self-con
 & "$buildScriptsDir\warp-packer" --arch windows-x64 --input_dir $publishDir --exec $exeInPath --output $exeOutPath
 
 Copy-Item "$buildScriptsDir\rtt.config.json" "$projectParentDir\bin"
+Copy-Item "$buildScriptsDir\HorizonLeeds.TestData.json" "$projectParentDir\bin"
 
 

@@ -1,8 +1,10 @@
-﻿using RestfulTestTool.Core.Config;
+﻿using Newtonsoft.Json;
+using RestfulTestTool.Core.Config;
 using RestfulTestTool.Core.Handlers;
-using RestfulTestTool.Core.Types.ResultTypes;
+using RestfulTestTool.Core.Types.EndpointTypes;
 using RestfulTestTool.TestController;
 using System;
+using System.Collections.Generic;
 
 namespace RestfulTestTool.App
 {
@@ -20,9 +22,14 @@ namespace RestfulTestTool.App
                             .SetUpSimulatedUsers()
                             .SetUpTestSchedule();
 
-            test.Run();
+            foreach(EndpointProbe item in test.TestSchedule.EndpointProbeList)
+            {
+                Console.WriteLine($"{item.Endpoint}:\n\t{item.Method.Method.ToUpper()}:\n\t\t{JsonConvert.SerializeObject(item.Payload)}\n\t\t{item.PayloadMIMEType},\n\t\t{item.ExpectedResponseMIMEType}");
+            }
 
-            ResultsHandler.HandleResultSet(test.ResultSet);
+            // test.Run();
+
+            // ResultsHandler.HandleResultSet(test.ResultSet);
             
             return 0;
         }

@@ -4,9 +4,7 @@ using RestfulTestTool.Core.Handlers;
 using RestfulTestTool.Core.Types.CoreTypes;
 using RestfulTestTool.Core.Types.ResultTypes;
 using RestfulTestTool.TestInitialiser;
-using System;
 using System.Collections.Generic;
-using System.Net;
 
 namespace RestfulTestTool.TestController
 {
@@ -57,6 +55,7 @@ namespace RestfulTestTool.TestController
         public Test SetUpTestSchedule()
         {
             TestScheduleSetup setup = new TestScheduleSetup();
+            TestSchedule = setup.GenerateSchedule(Configuration, TestResources);
 
             if (!setup.bSuccessful)
                 ErrorHandler.InitialisationError(ErrorLevel.Fatal,
@@ -110,7 +109,8 @@ namespace RestfulTestTool.TestController
         {
             PayloadDictionarySetup setup = new PayloadDictionarySetup();
 
-            TestResources.PayloadDictionary = setup.GeneratePayloadDictionary(Configuration);
+            TestResources.PayloadDictionary =
+                setup.GeneratePayloadDictionary(Configuration, TestResources.SwaggerDocument);
 
             if (!setup.bSuccessful)
                 ErrorHandler.InitialisationError(ErrorLevel.Fatal,
@@ -124,9 +124,16 @@ namespace RestfulTestTool.TestController
         {
             ResultSet = new ResultSet();
 
-            Coordinator coordinator = new Coordinator();
+            Coordinator coordinator =
+                new Coordinator
+                {
+                    TestResources = TestResources,
+                    TestSchedule = TestSchedule,
+                    SimulatedUserList = SimulatedUserList,
+                    ResultSet = ResultSet
+                };
 
-            // coordinator jobs: assign tasks to users, monitor progress, collect/collate results
+            coordinator.RunTest();
         }
     }
 }

@@ -64,7 +64,7 @@ namespace RestfulTestTool.Core.Types.CoreTypes
                     probe.AddError(ErrorLevel.Warning,
                                    ProbeErrorType.UnknownPayloadContentType,
                                    ProbeErrorMessages.Payload_UnknownContentType
-                                      .Replace("[[Endpoint]]", probe.Endpoint.Name
+                                      .Replace("[[Endpoint]]", probe.Endpoint
                                       .Replace("[[ContentType]]", payloadType)));                    
                     return new StringContent(payload.ToString(), Encoding.UTF8, "text/plain");
             }

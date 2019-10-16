@@ -16,7 +16,7 @@ namespace RestfulTestTool.Core.Handlers
 
             if (nonFatalErrors.Any())
             {
-                Console.WriteLine("There were non-fatal errors during configuration:\n");
+                Console.WriteLine("There were non-fatal errors during configuration:");
                 foreach (ConfigError error in nonFatalErrors)
                 {
                     Console.WriteLine($"\t{error.Severity} ({error.Type}): {error.Message}");
@@ -25,7 +25,7 @@ namespace RestfulTestTool.Core.Handlers
 
             if (fatalErrors.Any())
             {
-                Console.WriteLine("There were fatal errors during configuration:\n");
+                Console.WriteLine("There were fatal errors during configuration:");
                 foreach (ConfigError error in nonFatalErrors)
                 {
                     Console.WriteLine($"\t{error.Type} error: {error.Message}");
@@ -53,7 +53,7 @@ namespace RestfulTestTool.Core.Handlers
 
             if (nonFatalErrors.Any())
             {
-                Console.WriteLine("There were non-fatal errors initialising the test:\n");
+                Console.WriteLine("There were non-fatal errors initialising the test:");
                 foreach (SetupError error in nonFatalErrors)
                 {
                     Console.WriteLine($"\t{error.Severity} ({error.Type}): {error.Message}");
@@ -62,8 +62,8 @@ namespace RestfulTestTool.Core.Handlers
 
             if (fatalErrors.Any())
             {
-                Console.WriteLine("There were fatal errors initialising the test:\n");
-                foreach (SetupError error in nonFatalErrors)
+                Console.WriteLine("There were fatal errors initialising the test:");
+                foreach (SetupError error in fatalErrors)
                 {
                     Console.WriteLine($"\t{error.Type} error: {error.Message}");
                 }

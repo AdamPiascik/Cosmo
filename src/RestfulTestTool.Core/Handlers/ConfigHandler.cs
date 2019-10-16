@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using RestfulTestTool.Core.Config;
 using RestfulTestTool.Core.Constants;
 using RestfulTestTool.Core.Enums;
+using RestfulTestTool.Core.Types.ErrorTypes;
 using System;
 using System.IO;
 
@@ -52,9 +53,12 @@ namespace RestfulTestTool.Core.Handlers
             }
             catch (Exception ex)
             {
-                testConfig.AddConfigError(ConfigErrorType.JsonParser,
-                                          ErrorLevel.Fatal,
-                                          ex.Message);   
+                testConfig.Errors.Add(new ConfigError
+                {
+                    Severity = ErrorLevel.Warning,
+                    Type = ConfigErrorType.InvalidCombination,
+                    Message = ex.Message
+                });
             }
 
             if (testConfig.HasErrors())

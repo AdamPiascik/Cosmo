@@ -7,6 +7,7 @@ namespace RestfulTestTool.Core.Enums
         PayloadDictionarySetup,
         SimulatedUserSetup,
         SwaggerDocumentSetup,
-        TestScheduleSetup
+        TestScheduleSetup,
+        EndpointMIMEError
     }
 }

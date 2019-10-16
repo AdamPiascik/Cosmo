@@ -48,9 +48,12 @@ namespace RestfulTestTool.Core.Config
         {
             if (SaveResponses && SimulatedUsers > 1)
             {
-                AddConfigError(ConfigErrorType.InvalidCombination,
-                                ErrorLevel.Warning,
-                                ConfigErrorMessages.Mismatch_SaveResponsesAndSimulatedUsers);
+                Errors.Add(new ConfigError
+                {
+                    Severity = ErrorLevel.Warning,
+                    Type = ConfigErrorType.InvalidCombination,
+                    Message = ConfigErrorMessages.Mismatch_SaveResponsesAndSimulatedUsers
+                });
                 SaveResponses = false;
             }
                 
@@ -58,16 +61,6 @@ namespace RestfulTestTool.Core.Config
                 return true;
             else
                 return false;
-        }
-
-        public void AddConfigError(ConfigErrorType errorType, ErrorLevel errorLevel, string message)
-        {
-            Errors.Add(new ConfigError
-            {
-                Type = errorType,
-                Severity = errorLevel,
-                Message = message
-            });
         }
     }
 }
