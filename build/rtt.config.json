@@ -9,5 +9,6 @@
     "DataFiles": [ "HorizonLeeds.TestData.json" ],
     "AuthEndpoints": [],
     "Include": [],
-    "Exclude": []
+    "Exclude": [],
+    "TestMethods": [ "GET" ]
 }

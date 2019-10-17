@@ -22,12 +22,7 @@ namespace RestfulTestTool.App
                             .SetUpSimulatedUsers()
                             .SetUpTestSchedule();
 
-            foreach(EndpointProbe item in test.TestSchedule.EndpointProbeList)
-            {
-                Console.WriteLine($"{item.Endpoint}:\n\t{item.Method.Method.ToUpper()}:\n\t\t{JsonConvert.SerializeObject(item.Payload)}\n\t\t{item.PayloadMIMEType},\n\t\t{item.ExpectedResponseMIMEType}");
-            }
-
-            // test.Run();
+            test.Run();
 
             // ResultsHandler.HandleResultSet(test.ResultSet);
             

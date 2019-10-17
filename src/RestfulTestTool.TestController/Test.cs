@@ -2,7 +2,7 @@ using RestfulTestTool.Core.Config;
 using RestfulTestTool.Core.Enums;
 using RestfulTestTool.Core.Handlers;
 using RestfulTestTool.Core.Types.CoreTypes;
-using RestfulTestTool.Core.Types.ResultTypes;
+using RestfulTestTool.Core.Types.EndpointTypes;
 using RestfulTestTool.TestInitialiser;
 using System.Collections.Generic;
 
@@ -16,8 +16,6 @@ namespace RestfulTestTool.TestController
         public TestSchedule TestSchedule { get; set; }
         public TestResources TestResources { get; set; }
         public IList<SimulatedUser> SimulatedUserList { get; set; }
-
-        public ResultSet ResultSet { get; set; }
 
         public Test(TestConfig testconfig)
         {
@@ -122,15 +120,13 @@ namespace RestfulTestTool.TestController
 
         public void Run()
         {
-            ResultSet = new ResultSet();
-
             Coordinator coordinator =
                 new Coordinator
                 {
                     TestResources = TestResources,
                     TestSchedule = TestSchedule,
                     SimulatedUserList = SimulatedUserList,
-                    ResultSet = ResultSet
+                    ResultSet = new List<ProbeResult>()
                 };
 
             coordinator.RunTest();

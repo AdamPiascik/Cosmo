@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestfulTestTool.Core.Constants;
 using RestfulTestTool.Core.Enums;
 using RestfulTestTool.Core.Types.EndpointTypes;
@@ -6,6 +8,7 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace RestfulTestTool.Core.Types.CoreTypes
 {
@@ -15,59 +18,40 @@ namespace RestfulTestTool.Core.Types.CoreTypes
         public bool bSavePerformanceData { get; set; }
         public bool bSaveResponses { get; set; }
 
-        public async void ExecuteProbe(EndpointProbe probe)
+        public async Task<ProbeResult> ExecuteProbe(EndpointProbe probe)
         {
+            string payloadString =
+                    probe.Payload?.GetType() == typeof(JObject) ?
+                    JsonConvert.SerializeObject(probe.Payload) :
+                    probe.Payload?.ToString() ?? string.Empty;
+
             HttpRequestMessage request = new HttpRequestMessage
             {
                 Method = probe.Method,
-                Content = GenerateRequestPayload(probe),
+                Content = new StringContent(
+                        payloadString,
+                        Encoding.UTF8,
+                        "application/json")               
             };
 
-            Stopwatch stopwatch = new Stopwatch();
+            Stopwatch timer = Stopwatch.StartNew();
 
-            if (bSavePerformanceData)
-                stopwatch.Start();
+            HttpResponseMessage response = TargetAPI.SendAsync(request).Result;
 
-            await TargetAPI.SendAsync(request);
+            timer.Stop();
 
-            if (bSavePerformanceData)
-            {
-                stopwatch.Stop();
-                // update performance record
-            }
+            string textResults = $"Test of {probe.Endpoint}:\n";
+            textResults +=$"\tPayload: {request.Content.ReadAsStringAsync().Result}\n";
+            textResults +=$"\tResponse status code: {(int)response.StatusCode} {response.StatusCode}\n";
+            textResults +=
+                bSavePerformanceData ?
+                $"\tRound-trip time: {timer.ElapsedMilliseconds} ms\n" :
+                "\n";
 
-            if (bSaveResponses)
-            {
-                // update response dictionary
-            }
-
-            // trigger probe complete event
-        }
-
-        private HttpContent GenerateRequestPayload(EndpointProbe probe)
-        {
-            dynamic payload = probe.Payload;
-            string payloadType = probe.PayloadMIMEType.MediaType;
-
-            switch (payloadType)
-            {
-                case var contentType when new Regex(@"json").IsMatch(payloadType):
-                    return new StringContent(payload, Encoding.UTF8, "application/json");
-
-                case var contentType when new Regex(@"xml").IsMatch(payloadType):
-                    return new StringContent(payload, Encoding.UTF8, "application/xml");
-
-                case var contentType when new Regex(@"text/plain").IsMatch(payloadType):
-                    return new StringContent(payload, Encoding.UTF8, "text/plain");
-
-                default:
-                    probe.AddError(ErrorLevel.Warning,
-                                   ProbeErrorType.UnknownPayloadContentType,
-                                   ProbeErrorMessages.Payload_UnknownContentType
-                                      .Replace("[[Endpoint]]", probe.Endpoint
-                                      .Replace("[[ContentType]]", payloadType)));                    
-                    return new StringContent(payload.ToString(), Encoding.UTF8, "text/plain");
-            }
+            return new ProbeResult
+                    {
+                        TextResults = textResults
+                    };
         }
     }
 }

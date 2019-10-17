@@ -4,32 +4,34 @@ using RestfulTestTool.Core.Types.ErrorTypes;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 
 namespace RestfulTestTool.Core.Types.CoreTypes
 {
     public class TestSchedule
     {
         private int Progress { get; set; }
+        private int NumberOfProbes => EndpointProbeList.Count;
+        public bool HasBeenCompleted => Progress == ProgrammeOfWork.Count ? true : false;
         public int RepetitionsPerEndpoint { get; set; }
-        public ConcurrentBag<EndpointProbe> EndpointProbeList { get; set; }
+        public IList<EndpointProbe> EndpointProbeList { get; set; }
         public IList<int> ProgrammeOfWork { get; set; }
         public ConcurrentDictionary<string, int> RecordOfWork { get; set; }
         public IList<SetupError> Errors { get; set; }
 
         public TestSchedule()
         {
+            Progress = 0;
             RepetitionsPerEndpoint = 0;
-            EndpointProbeList = new ConcurrentBag<EndpointProbe>();
+            EndpointProbeList = new List<EndpointProbe>();
             ProgrammeOfWork = new List<int>();
             RecordOfWork = new ConcurrentDictionary<string, int>();
         }
 
-        public bool HasBeenCompleted()
+        public EndpointProbe GetNextProbe()
         {
-            return Progress == ProgrammeOfWork.Count ? true : false;
+            EndpointProbe probe = EndpointProbeList[ProgrammeOfWork[Progress]];
+            ++Progress;
+            return probe;
         }
     }
 }

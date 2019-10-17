@@ -10,6 +10,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RestfulTestTool.TestInitialiser
@@ -51,7 +52,7 @@ namespace RestfulTestTool.TestInitialiser
             else
             {
                 schedule.RepetitionsPerEndpoint = config.SimulatedUsers;
-                schedule.EndpointProbeList = GetEndpointProbeList(resources);
+                schedule.EndpointProbeList = GetEndpointProbeList(resources, config);
                 schedule.ProgrammeOfWork = GetProgrammeOfWork(schedule.EndpointProbeList.Count, schedule.RepetitionsPerEndpoint);
                 schedule.RecordOfWork = InitialiseRecordOfWork(schedule.EndpointProbeList);
 
@@ -59,9 +60,9 @@ namespace RestfulTestTool.TestInitialiser
             }
         }
 
-        private ConcurrentBag<EndpointProbe> GetEndpointProbeList(TestResources resources)
+        private IList<EndpointProbe> GetEndpointProbeList(TestResources resources, TestConfig config)
         {
-            ConcurrentBag<EndpointProbe> list = new ConcurrentBag<EndpointProbe>();
+            BlockingCollection<EndpointProbe> list = new BlockingCollection<EndpointProbe>();
 
             Parallel.ForEach(
                 resources.SwaggerDocument.Paths,
@@ -69,7 +70,7 @@ namespace RestfulTestTool.TestInitialiser
                 path =>
                 {
                     Parallel.ForEach(
-                        Defaults.HttpMethods,
+                        Defaults.HttpMethods.Intersect(config.TestMethods, StringComparer.OrdinalIgnoreCase),
                         new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
                         method =>
                         {
@@ -96,20 +97,22 @@ namespace RestfulTestTool.TestInitialiser
                         }
                     );
                 });
+            
+            list.CompleteAdding();
 
-            return list;
+            return list.ToList();
         }
 
         private IList<int> GetProgrammeOfWork(int numberOfProbes, int repetitionsPerEndpoint)
         {
             int listLength = numberOfProbes * repetitionsPerEndpoint;
             var rng = new Random();
-            IList<int> list = Enumerable.Range(1, listLength).OrderBy(x => rng.Next()).ToList();
+            IList<int> list = Enumerable.Range(0, listLength - 1).OrderBy(x => rng.Next()).ToList();
 
             return list;
         }
 
-        private ConcurrentDictionary<string, int> InitialiseRecordOfWork(ConcurrentBag<EndpointProbe> probeList)
+        private ConcurrentDictionary<string, int> InitialiseRecordOfWork(IList<EndpointProbe> probeList)
         {
             ConcurrentDictionary<string, int> dict = new ConcurrentDictionary<string, int>();
 
