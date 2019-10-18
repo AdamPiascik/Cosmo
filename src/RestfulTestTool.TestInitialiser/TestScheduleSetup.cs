@@ -190,7 +190,7 @@ namespace RestfulTestTool.TestInitialiser
                                 Type = InitialiserErrorType.EndpointMIMEError,
                                 Message = InitialiserErrorMessages.EndpointMIMEError_MultipleMIMETypesSpecified
                                             .Replace("[[Endpoint]]", endpoint)
-                                            .Replace("[[FirstTypes]]", payloadTypes.First())
+                                            .Replace("[[FirstType]]", payloadTypes.First())
                                             .Replace("[[Type]]", "payload")
                             });
             }
@@ -242,7 +242,7 @@ namespace RestfulTestTool.TestInitialiser
                                 Type = InitialiserErrorType.EndpointMIMEError,
                                 Message = InitialiserErrorMessages.EndpointMIMEError_MultipleMIMETypesSpecified
                                             .Replace("[[Endpoint]]", endpoint)
-                                            .Replace("[[FirstTypes]]", responseTypes.First())
+                                            .Replace("[[FirstType]]", responseTypes.First())
                                             .Replace("[[Type]]", "response")
                             });
             }

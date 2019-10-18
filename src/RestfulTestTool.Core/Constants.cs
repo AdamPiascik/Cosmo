@@ -39,6 +39,10 @@ namespace RestfulTestTool.Core.Constants
     public static class Defaults
     {
         public const string ConfigFile = @".\rtt.config.json";
+        public const string ErrorsFile = @".\[[TestName]]\[[Now]]\errors.log";
+        public const string WarningsFile = @".\[[TestName]]\[[Now]]\warnings.log";
+        public const string ResponseFile = @".\[[TestName]]\[[Now]]\responses.log";
+        public const string PerformanceFile = @".\[[TestName]]\[[Now]]\performance.log";
         public const double ConnectionScaleFactor = 1.2;
         public const int RequestTimeoutInSeconds = 10;
         public static IList<string> HttpMethods =

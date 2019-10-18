@@ -14,6 +14,8 @@ namespace RestfulTestTool.App
         {
             TestConfig testConfig = ConfigHandler.ConfigureTestParameters(args);
 
+            Console.WriteLine($"Initialising {testConfig.TestName}...\n");
+
             Test test = new Test(testConfig)
                             .SetUpTargetAPI()
                             .SetUpSwaggerDocuments()
@@ -22,7 +24,11 @@ namespace RestfulTestTool.App
                             .SetUpSimulatedUsers()
                             .SetUpTestSchedule();
 
-            test.Run();
+            Console.WriteLine($"Running {testConfig.TestName}...\n");
+
+            Console.WriteLine(test.TestSchedule.EndpointProbeList.Count);
+
+            // test.Run();
 
             // ResultsHandler.HandleResultSet(test.ResultSet);
             
