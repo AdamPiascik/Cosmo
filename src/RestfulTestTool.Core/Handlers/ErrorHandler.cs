@@ -1,4 +1,5 @@
 using CommandLine;
+using RestfulTestTool.Core.Constants;
 using RestfulTestTool.Core.Enums;
 using RestfulTestTool.Core.Types.ErrorTypes;
 using System;
@@ -16,28 +17,30 @@ namespace RestfulTestTool.Core.Handlers
 
             if (nonFatalErrors.Any())
             {
-                Console.WriteLine("There were non-fatal errors during configuration:");
+                Globals.LoggingHandler.LogWarning("There were non-fatal errors during configuration:\n");
                 foreach (ConfigError error in nonFatalErrors)
                 {
-                    Console.WriteLine($"\t{error.Severity} ({error.Type}): {error.Message}");
+                    Globals.LoggingHandler.LogWarning($"\t{error.Severity} ({error.Type}): {error.Message}\n");
                 }
             }
 
             if (fatalErrors.Any())
             {
-                Console.WriteLine("There were fatal errors during configuration:");
+                Globals.LoggingHandler.LogConsole("There were fatal errors during configuration:\n");
                 foreach (ConfigError error in nonFatalErrors)
                 {
-                    Console.WriteLine($"\t{error.Type} error: {error.Message}");
+                    Globals.LoggingHandler.LogConsole($"\t{error.Type} error: {error.Message}\n");
+                    Globals.LoggingHandler.LogError($"\t{error.Type} error: {error.Message}\n");
                 }
 
                 Environment.Exit(1);
-            }                
+            }
         }
 
         public static void ConfigFileNotFound(string path)
         {
-            Console.WriteLine($"The config file at {path} was not found. Exiting...");
+            Globals.LoggingHandler.LogConsole($"The config file at {path} was not found. Exiting...\n");
+            Globals.LoggingHandler.LogError($"The config file at {path} was not found. Exiting...\n");
             Environment.Exit(1);
         }
 
@@ -53,19 +56,21 @@ namespace RestfulTestTool.Core.Handlers
 
             if (nonFatalErrors.Any())
             {
-                Console.WriteLine("There were non-fatal errors initialising the test:");
+                Globals.LoggingHandler.LogWarning("There were non-fatal errors initialising the test:\n");
                 foreach (SetupError error in nonFatalErrors)
                 {
-                    Console.WriteLine($"\t{error.Severity} ({error.Type}): {error.Message}");
+                    Globals.LoggingHandler.LogWarning($"\t{error.Severity} ({error.Type}): {error.Message}\n");
                 }
             }
 
             if (fatalErrors.Any())
             {
-                Console.WriteLine("There were fatal errors initialising the test:");
+                Globals.LoggingHandler.LogConsole("There were fatal errors initialising the test:\n");
+                Globals.LoggingHandler.LogError("There were fatal errors initialising the test:\n");
                 foreach (SetupError error in fatalErrors)
                 {
-                    Console.WriteLine($"\t{error.Type} error: {error.Message}");
+                    Globals.LoggingHandler.LogConsole($"\t{error.Type} error: {error.Message}\n");
+                    Globals.LoggingHandler.LogError($"\t{error.Type} error: {error.Message}\n");
                 }
 
                 Environment.Exit(1);

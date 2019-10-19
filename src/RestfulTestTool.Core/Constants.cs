@@ -1,3 +1,5 @@
+using RestfulTestTool.Core.Handlers;
+using System;
 using System.Collections.Generic;
 
 namespace RestfulTestTool.Core.Constants
@@ -38,11 +40,15 @@ namespace RestfulTestTool.Core.Constants
 
     public static class Defaults
     {
+        public const string BasePath = @".";
+        public static string ThisTestDirectory =>
+            $"{DateTime.Now.Date.ToString("dd-MM-yyy")}";
         public const string ConfigFile = @".\rtt.config.json";
-        public const string ErrorsFile = @".\[[TestName]]\[[Now]]\errors.log";
-        public const string WarningsFile = @".\[[TestName]]\[[Now]]\warnings.log";
-        public const string ResponseFile = @".\[[TestName]]\[[Now]]\responses.log";
-        public const string PerformanceFile = @".\[[TestName]]\[[Now]]\performance.log";
+        public const string ConsoleLogFile = @"console.log";
+        public const string ErrorsFile = @"errors.log";
+        public const string WarningsFile = @"warnings.log";
+        public const string ResponseFile = @"responses.log";
+        public const string PerformanceFile = @"performance.log";
         public const double ConnectionScaleFactor = 1.2;
         public const int RequestTimeoutInSeconds = 10;
         public static IList<string> HttpMethods =
@@ -50,5 +56,11 @@ namespace RestfulTestTool.Core.Constants
             {
                 "Get", "Post"
             };
+    }
+
+    public static class Globals
+    {
+        public static LoggingHandler LoggingHandler{ get; set; }
+        public static bool bProgramRunning { get; set; }
     }
 }
