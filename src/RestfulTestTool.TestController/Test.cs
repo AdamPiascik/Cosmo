@@ -93,7 +93,8 @@ namespace RestfulTestTool.TestController
         {
             AuthDictionarySetup setup = new AuthDictionarySetup();
 
-            TestResources.AuthDictionary = setup.GenerateAuthDictionary(Configuration);
+            TestResources.AuthDictionary =
+                setup.GenerateAuthDictionary(Configuration, ApiConnectionFactory);
 
             if (!setup.bSuccessful)
                 ErrorHandler.InitialisationError(ErrorLevel.Fatal,

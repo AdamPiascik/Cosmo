@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RestfulTestTool.Core.Constants;
 using RestfulTestTool.Core.Enums;
+using RestfulTestTool.Core.Types.EndpointTypes;
 using RestfulTestTool.Core.Types.ErrorTypes;
 
 namespace RestfulTestTool.Core.Config
@@ -25,7 +26,7 @@ namespace RestfulTestTool.Core.Config
         public string URL { get; set; }
 
         // Endpoint-related
-        public List<string> AuthEndpoints { get; set; }
+        public List<Auth> Auths { get; set; }
         public List<string> Include { get; set; }
         public List<string> Exclude { get; set; }
         public List<string> TestMethods { get; set; }

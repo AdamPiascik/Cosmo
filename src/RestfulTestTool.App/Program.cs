@@ -25,8 +25,8 @@ namespace RestfulTestTool.App
             Test test = new Test(testConfig)
                             .SetUpTargetAPI()
                             .SetUpSwaggerDocuments()
-                            .SetUpAuthDictionaries()
                             .SetUpPayloadDictionaries()
+                            .SetUpAuthDictionaries()
                             .SetUpSimulatedUsers()
                             .SetUpTestSchedule();
 

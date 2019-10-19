@@ -10,6 +10,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -132,10 +133,15 @@ namespace RestfulTestTool.TestInitialiser
             if (!authDictionary.Any())
                 return null;
 
-            if (authDictionary.TryGetValue(endpoint, out string token))
-                return token;
-            else
-                return null;
+            foreach (KeyValuePair<string, string> item in authDictionary)
+            {
+                Regex regex = new Regex(item.Key);
+                if (regex.Match(endpoint).Success)
+                {
+                    return item.Value;
+                }
+            }
+             return null;
         }
 
         private dynamic GetEndpointPayload(

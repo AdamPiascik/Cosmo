@@ -1,14 +1,21 @@
 {
     "TestName": "Psycruit Test",
-    "ProjectName": "Horizon Leeds",
+    "ProjectName": "PsycruitClient API",
     "URL": "http://psycruitclient-api.dev.avamae.co.uk",
     "UseLocalServer": false,
     "LocalPort": 5001,
     "LocalServerPath": "C:\\Dev Projects\\Horizon Leeds V1.0\\PlatformAPI\\Avamae\\Avamae.API\\Avamae.API.csproj",
     "SwaggerDoc": "v1/doc.json",
     "Environment": "development",
-    "DataFiles": [  ],
-    "AuthEndpoints": [],
+    "DataFiles": [ ],
+    "Auths": [
+        {
+            "LoginEndpoint": "v1\\Auth",
+            "TargetEndpoints": [ "*" ],
+            "Username": "larina.correia@avamae.co.uk",
+            "Password": "!LC123456a"
+        }
+     ],
     "Include": [],
     "Exclude": [],
     "TestMethods": [ "GET" ]
