@@ -6,12 +6,8 @@
 [Dd]ebug/
 [Rr]elease/
 x64/
-[Bb]in/
+[Bb]uild/
 [Oo]bj/
 
 # Visual Studio Code
 .vscode/
-
-# Misc
-
-build/*.json
