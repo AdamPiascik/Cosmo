@@ -7,7 +7,6 @@
 [Rr]elease/
 x64/
 [Bb]in/
-[Bb]uild/
 [Oo]bj/
 
 # Visual Studio Code
@@ -15,4 +14,4 @@ x64/
 
 # Misc
 
-build\*.json
+build/*.json
