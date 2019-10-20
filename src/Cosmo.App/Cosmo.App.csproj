@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cosmo.Core\Cosmo.Core.csproj" />
+    <ProjectReference Include="..\Cosmo.Controller\Cosmo.Controller.csproj" />
+    <ProjectReference Include="..\Cosmo.Initialiser\Cosmo.Initialiser.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <NoWarn>$(NoWarn);NU1605</NoWarn>
+  </PropertyGroup>
+
+</Project>
