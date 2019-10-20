@@ -3,10 +3,10 @@ using Cosmo.Core.Enums;
 using Cosmo.Core.Handlers;
 using Cosmo.Core.Types.CoreTypes;
 using Cosmo.Core.Types.EndpointTypes;
-using Cosmo.TestInitialiser;
+using Cosmo.Initialiser;
 using System.Collections.Generic;
 
-namespace Cosmo.TestController
+namespace Cosmo.Controller
 {
     public class Test
     {

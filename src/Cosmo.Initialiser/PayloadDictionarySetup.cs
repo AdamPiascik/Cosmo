@@ -12,7 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Cosmo.TestInitialiser
+namespace Cosmo.Initialiser
 {
     public class PayloadDictionarySetup
     {

@@ -3,10 +3,11 @@ using Cosmo.Core.Config;
 using Cosmo.Core.Constants;
 using Cosmo.Core.Handlers;
 using Cosmo.Core.Types.EndpointTypes;
-using Cosmo.TestController;
+using Cosmo.Controller;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace Cosmo.App
 {
@@ -14,33 +15,44 @@ namespace Cosmo.App
     {
         static int Main(string[] args)
         {
-            Globals.bProgramRunning  = true;
+            Globals.bProgramRunning = true;
 
             TestConfig testConfig = ConfigHandler.ConfigureTestParameters(args);
             Globals.LoggingHandler = new LoggingHandler(testConfig.TestName);
             Globals.LoggingHandler.StartLogQueueWatcher();
 
-            Globals.LoggingHandler.LogConsole($"Initialising {testConfig.TestName}...\n");
+            Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
-            Test test = new Test(testConfig)
-                            .SetUpTargetAPI()
-                            .SetUpSwaggerDocuments()
-                            .SetUpPayloadDictionaries()
-                            .SetUpAuthDictionaries()
-                            .SetUpSimulatedUsers()
-                            .SetUpTestSchedule();
+            Globals.LoggingHandler.LogConsole($"Cosmo {currentVersion.Major}.{currentVersion.Minor}.{currentVersion.Build}");
 
-            Globals.LoggingHandler.LogConsole($"Running {testConfig.TestName}...\n");
+            UpdateChecker updateChecker = new UpdateChecker(currentVersion, Environment.CurrentDirectory);
 
-            Globals.LoggingHandler.LogConsole(test.TestSchedule.EndpointProbeList.Count.ToString());
+            bool bUpdateApp = updateChecker.Execute();
 
-            // test.Run();
+            if (!bUpdateApp)
+            {
+                // Globals.LoggingHandler.LogConsole($"Initialising {testConfig.TestName}...\n");
 
-            // ResultsHandler.HandleResultSet(test.ResultSet);
+                // Test test = new Test(testConfig)
+                //                 .SetUpTargetAPI()
+                //                 .SetUpSwaggerDocuments()
+                //                 .SetUpPayloadDictionaries()
+                //                 .SetUpAuthDictionaries()
+                //                 .SetUpSimulatedUsers()
+                //                 .SetUpTestSchedule();
+
+                // Globals.LoggingHandler.LogConsole($"Running {testConfig.TestName}...\n");
+
+                // Globals.LoggingHandler.LogConsole(test.TestSchedule.EndpointProbeList.Count.ToString());
+
+                // test.Run();
+
+                // ResultsHandler.HandleResultSet(test.ResultSet);
+            }
 
             Globals.LoggingHandler.WaitForLoggingCompletion();
 
-            Globals.bProgramRunning  = false;           
+            Globals.bProgramRunning = false;
 
             return 0;
         }

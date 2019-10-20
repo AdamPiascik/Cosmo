@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 using System.Text;
 using Newtonsoft.Json.Linq;
 
-namespace Cosmo.TestInitialiser
+namespace Cosmo.Initialiser
 {
     public class AuthDictionarySetup
     {

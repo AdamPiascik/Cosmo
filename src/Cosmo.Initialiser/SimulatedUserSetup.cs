@@ -4,7 +4,7 @@ using Cosmo.Core.Types.ErrorTypes;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Cosmo.TestInitialiser
+namespace Cosmo.Initialiser
 {
     public class SimulatedUserSetup
     {

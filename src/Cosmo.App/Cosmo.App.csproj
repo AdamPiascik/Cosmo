@@ -11,7 +11,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <NoWarn>$(NoWarn);NU1605</NoWarn>
     <AssemblyName>Cosmo</AssemblyName>
-    <Version>0.9</Version>
+    <Author>Adam Piascik</Author>
     <Product>Cosmo</Product>
     <Description>A CLI tool for automated testing of REST APIs</Description>
   </PropertyGroup>

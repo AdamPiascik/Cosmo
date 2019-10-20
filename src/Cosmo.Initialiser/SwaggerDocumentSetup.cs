@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 
-namespace Cosmo.TestInitialiser
+namespace Cosmo.Initialiser
 {
     public class SwaggerDocumentSetup
     {

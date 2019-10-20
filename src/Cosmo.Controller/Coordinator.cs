@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Cosmo.TestController
+namespace Cosmo.Controller
 {
     public class Coordinator
     {

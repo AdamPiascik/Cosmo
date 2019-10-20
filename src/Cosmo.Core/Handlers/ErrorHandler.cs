@@ -39,8 +39,7 @@ namespace Cosmo.Core.Handlers
 
         public static void ConfigFileNotFound(string path)
         {
-            Globals.LoggingHandler.LogConsole($"The config file at {path} was not found. Exiting...\n");
-            Globals.LoggingHandler.LogError($"The config file at {path} was not found. Exiting...\n");
+            Console.WriteLine($"The config file at {path} was not found. Exiting...\n");
             Environment.Exit(1);
         }
 

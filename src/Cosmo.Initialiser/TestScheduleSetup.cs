@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Cosmo.TestInitialiser
+namespace Cosmo.Initialiser
 {
     public class TestScheduleSetup
     {

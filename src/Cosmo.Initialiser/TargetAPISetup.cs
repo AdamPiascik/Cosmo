@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 
-namespace Cosmo.TestInitialiser
+namespace Cosmo.Initialiser
 {
     public class TargetAPISetup
     {
