@@ -17,6 +17,10 @@ namespace Cosmo.Core.Types.CoreTypes
         public HttpClient TargetAPI { get; set; }
         public bool bSavePerformanceData { get; set; }
         public bool bSaveResponses { get; set; }
+        public bool bAsyncUser { get; set; }
+        public bool bHasFinishedWork { get; set; } = false;
+        public int UserID { get; set; }
+        public int NumberOfConcurrentUsers { get; set; }
 
         public async Task<ProbeResult> ExecuteProbe(EndpointProbe probe)
         {
@@ -40,17 +44,20 @@ namespace Cosmo.Core.Types.CoreTypes
 
             timer.Stop();
 
-            string textResults = $"Test of {probe.Endpoint}:\n";
-            textResults +=$"\tPayload: {request.Content.ReadAsStringAsync().Result}\n";
-            textResults +=$"\tResponse status code: {(int)response.StatusCode} {response.StatusCode}\n";
-            textResults +=
-                bSavePerformanceData ?
-                $"\tRound-trip time: {timer.ElapsedMilliseconds} ms\n" :
-                "\n";
+            string resultsString =
+                $"Test of {probe.Endpoint}:\n"
+                + $"Method: {probe.Method}\n"
+                + $"Payload: {request.Content.ReadAsStringAsync().Result}\n"
+                + $"Response status code: {(int)response.StatusCode} {response.StatusCode}\n"
+                + $"Round-trip time: {timer.ElapsedMilliseconds} ms\n\n";
+
+            string performanceString = 
+                $"{probe.Endpoint},{probe.Method},{UserID},{NumberOfConcurrentUsers},{(int)response.StatusCode},{timer.ElapsedMilliseconds}\n";
 
             return new ProbeResult
                     {
-                        TextResults = textResults
+                        ResultsString = resultsString,
+                        PerformanceString = performanceString
                     };
         }
     }

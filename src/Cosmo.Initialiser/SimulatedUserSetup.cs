@@ -26,8 +26,11 @@ namespace Cosmo.Initialiser
                     new SimulatedUser
                     {
                         TargetAPI = factory.NewConnection(),
-                        bSaveResponses = config.SaveResponses,
-                        bSavePerformanceData = config.SavePerformanceData
+                        bSaveResponses = true,
+                        bSavePerformanceData = true,
+                        bAsyncUser = config.UseAsyncUsers,
+                        UserID = i + 1,
+                        NumberOfConcurrentUsers = config.SimulatedUsers
                     });
             }
 

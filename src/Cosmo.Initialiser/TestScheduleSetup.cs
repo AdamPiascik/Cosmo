@@ -55,7 +55,7 @@ namespace Cosmo.Initialiser
                 schedule.RepetitionsPerEndpoint = config.SimulatedUsers;
                 schedule.EndpointProbeList = GetEndpointProbeList(resources, config);
                 schedule.ProgrammeOfWork = GetProgrammeOfWork(schedule.EndpointProbeList.Count, schedule.RepetitionsPerEndpoint);
-                schedule.RecordOfWork = InitialiseRecordOfWork(schedule.EndpointProbeList);
+                schedule.RecordOfWork = InitialiseRecordOfWork(config.SimulatedUsers);
 
                 return schedule;
             }
@@ -109,20 +109,22 @@ namespace Cosmo.Initialiser
             int listLength = numberOfProbes * repetitionsPerEndpoint;
             var rng = new Random();
             IList<int> list = Enumerable.Range(0, listLength - 1).OrderBy(x => rng.Next()).ToList();
+            list = list.Select(x => x % numberOfProbes).ToList();
 
             return list;
         }
 
-        private ConcurrentDictionary<string, int> InitialiseRecordOfWork(IList<EndpointProbe> probeList)
+        private ConcurrentDictionary<int, int> InitialiseRecordOfWork(int numberOfUsers)
         {
-            ConcurrentDictionary<string, int> dict = new ConcurrentDictionary<string, int>();
+            ConcurrentDictionary<int, int> dict = new ConcurrentDictionary<int, int>();
 
-            Parallel.ForEach(
-                probeList,
+            Parallel.For(
+                0,
+                numberOfUsers,
                 new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
-                probe =>
+                userID =>
                 {
-                    dict.AddOrUpdate(probe.Endpoint, 0, (matchedKey, value) => value);
+                    dict.TryAdd(userID, 0);
                 });
 
             return dict;

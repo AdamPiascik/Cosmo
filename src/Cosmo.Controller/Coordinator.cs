@@ -1,8 +1,14 @@
+using Cosmo.Core.Constants;
 using Cosmo.Core.Types.CoreTypes;
 using Cosmo.Core.Types.EndpointTypes;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Cosmo.Controller
@@ -14,38 +20,68 @@ namespace Cosmo.Controller
         public TestResources TestResources { get; set; }
         public IList<SimulatedUser> SimulatedUserList { get; set; }
         public IList<ProbeResult> ResultSet { get; set; }
+        private delegate void FreeUserHandler(SimulatedUser user);
+        private event FreeUserHandler RaiseNewFreeUser;
 
         public void RunTest()
         {
-            // coordinator jobs: assign tasks to users, monitor progress, collect/collate results
+            Globals.LoggingHandler.LogPerformance(Defaults.PerformanceLogHeader);
+            RaiseNewFreeUser += AssignProbe;
 
-            while(!TestSchedule.HasBeenCompleted)
+            // initially assign one probe to each user
+            foreach (SimulatedUser user in SimulatedUserList)
             {
-                ResultSet.Add(AssignProbe(SimulatedUserList.First()));
-            };
-
-            foreach(ProbeResult result in ResultSet)
-            {
-                Console.WriteLine(result.TextResults);
+                AssignProbe(user);
             }
 
-            // while (!TestSchedule.HasBeenCompleted)
-            // {
-            //     foreach(SimulatedUser user in SimulatedUserList)
-            //     {
-            //         AssignProbe(user);
-                    
-            //         // user.ExecuteProbe();
-            //     }
-            //     // if any free users, assign next task
-            // }
-
-            // await TestStatus;
+            while (!TestSchedule.HasBeenCompleted)
+            {
+                Thread.Sleep(50);
+            };
         }
 
-        private ProbeResult AssignProbe(SimulatedUser user)
+        public void HandleResultSet()
         {
-            return user.ExecuteProbe(TestSchedule.GetNextProbe()).Result;
+            foreach (ProbeResult result in ResultSet)
+            {
+                Globals.LoggingHandler.LogResponse(result.ResultsString);
+                Globals.LoggingHandler.LogPerformance(result.PerformanceString);
+            }
+        }
+
+        private async void AssignProbe(SimulatedUser user)
+        {
+            if (user.bHasFinishedWork)
+                return;
+
+            EndpointProbe probe = TestSchedule.GetNextProbe();
+
+            await Task.Run(async () =>
+            {
+                if (probe != null)
+                {
+                    if (user.bAsyncUser)
+                    {
+                        AssignProbe(user);
+                    }
+
+                    ProbeResult probeResult = await user.ExecuteProbe(probe);
+
+                    ResultSet.Add(probeResult);
+                    RaiseNewFreeUser(user);
+                }
+            });
+        }
+
+        private void UpdateRecordOfWork(SimulatedUser user)
+        {
+            TestSchedule.RecordOfWork
+                .AddOrUpdate(user.UserID, 1, ((key, val) => ++val));
+
+            if (TestSchedule.RecordOfWork[user.UserID] == TestSchedule.EndpointProbeList.Count)
+            {
+                user.bHasFinishedWork = true;
+            }
         }
     }
 }

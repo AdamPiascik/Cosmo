@@ -6,8 +6,8 @@ namespace Cosmo.Core.Constants
 {
     public static class ConfigErrorMessages
     {
-        public const string Mismatch_SaveResponsesAndSimulatedUsers = 
-            "You can't save responses when simulating more than one user. Response saving has been turned off.";
+        public const string Mismatch_UseAsyncUsersAndSimulatedUsers = 
+            "You've turned on async users with a user count of [[Users]]. The load on your API may exceed what you expect; do you want to continue? (Y)es/(N)o/(Q)uit:";
     }
 
     public static class ProbeErrorMessages
@@ -49,13 +49,15 @@ namespace Cosmo.Core.Constants
         public const string WarningsFile = @"warnings.log";
         public const string ResponseFile = @"responses.log";
         public const string PerformanceFile = @"performance.log";
-        public const double ConnectionScaleFactor = 1.2;
+        public const double ConnectionScaleFactor = 1.1;
         public const int RequestTimeoutInSeconds = 10;
         public static IList<string> HttpMethods =
             new List<string>
             {
                 "Get", "Post"
             };
+        public const string PerformanceLogHeader =
+            "Endpoint,Method,UserID,ConcurrentUsers,ResponseStatusCode,RoundTripTime";
     }
 
     public static class Globals

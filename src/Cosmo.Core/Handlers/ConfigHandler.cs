@@ -23,8 +23,6 @@ namespace Cosmo.Core.Handlers
 
         public static void ConfigureTest(AppOptions options, ref TestConfig testConfig)
         {
-            testConfig.Verbose = options.Verbose;
-
             if (options.ConfigFilePath != null)
             {
                 if (File.Exists(options.ConfigFilePath))

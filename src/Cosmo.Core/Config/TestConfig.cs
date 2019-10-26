@@ -13,7 +13,6 @@ namespace Cosmo.Core.Config
         // Customisation
         public string TestName { get; set; } = DateTime.Now.ToString();
         public string ProjectName { get; set; }
-        public bool Verbose { get; set; }
         public List<string> DataFiles { get; set; }
 
         // For local server
@@ -26,15 +25,16 @@ namespace Cosmo.Core.Config
         public string URL { get; set; }
 
         // Endpoint-related
-        public List<Auth> Auths { get; set; }
-        public List<string> Include { get; set; }
-        public List<string> Exclude { get; set; }
+        public List<Auth> Auths { get; set; } = new List<Auth>();
+        public List<string> Include { get; set; } = new List<string>();
+        public List<string> Exclude { get; set; }  = new List<string>();
         public List<string> TestMethods { get; set; }
-        public string SwaggerDoc { get; set; }
+            = new List<string> { "GET", "POST" };
+        public string SwaggerDoc { get; set; } = "v1/doc.json";
 
         // Flags
-        public bool SavePerformanceData { get; set; } = true;
-        public bool SaveResponses { get; set; } = false;
+        public bool UseAsyncUsers { get; set; }
+        public bool CheckForUpdates { get; set; } = false;
 
         // Load testing
         public int SimulatedUsers { get; set; } = 1;
@@ -48,15 +48,16 @@ namespace Cosmo.Core.Config
         }
         public bool HasErrors()
         {
-            if (SaveResponses && SimulatedUsers > 1)
+            if (UseAsyncUsers && SimulatedUsers > 1)
             {
                 Errors.Add(new ConfigError
                 {
-                    Severity = ErrorLevel.Warning,
-                    Type = ConfigErrorType.InvalidCombination,
-                    Message = ConfigErrorMessages.Mismatch_SaveResponsesAndSimulatedUsers
+                    Severity = ErrorLevel.PromptWarning,
+                    Type = ConfigErrorType.AsyncLoadTesting,
+                    Message = 
+                        ConfigErrorMessages.Mismatch_UseAsyncUsersAndSimulatedUsers
+                            .Replace("[[Users]]", SimulatedUsers.ToString())
                 });
-                SaveResponses = false;
             }
                 
             if (Errors.Any())

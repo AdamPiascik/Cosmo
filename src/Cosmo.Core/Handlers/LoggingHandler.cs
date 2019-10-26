@@ -20,6 +20,13 @@ namespace Cosmo.Core.Handlers
         private string WarningLogFile { get; set; }
         private string ResponseLogFile { get; set; }
         private string PerformanceLogFile { get; set; }
+
+        private StringBuilder ConsoleLogSB = new StringBuilder();
+        private StringBuilder ErrorLogSB = new StringBuilder();
+        private StringBuilder WarningLogSB = new StringBuilder();
+        private StringBuilder ResponseLogSB = new StringBuilder();
+        private StringBuilder PerformanceLogSB = new StringBuilder();
+
         public ConcurrentQueue<string> ConsoleLogQueue { get; set; }
         public ConcurrentQueue<string> ErrorLogQueue { get; set; }
         public ConcurrentQueue<string> WarningLogQueue { get; set; }
@@ -59,7 +66,7 @@ namespace Cosmo.Core.Handlers
         public void LogConsole(string message)
         {
             ConsoleLogQueue.Enqueue(message);
-            Console.WriteLine(message);
+            Console.Write(message);
         }
 
         public void LogError(string message) =>
@@ -85,8 +92,10 @@ namespace Cosmo.Core.Handlers
                    || ResponseLogQueue.Any()
                    || PerformanceLogQueue.Any())
             {
-                Thread.Sleep(50);
+                Thread.Sleep(10);
             }
+
+            WriteAllLogs();
         }
 
         private async Task LogQueueWatcher()
@@ -96,17 +105,31 @@ namespace Cosmo.Core.Handlers
                 while (Globals.bProgramRunning)
                 {
                     if (ConsoleLogQueue.TryDequeue(out string consoleMessage))
-                        File.AppendAllText(ConsoleLogFile, consoleMessage);
+                        // File.AppendAllText(ConsoleLogFile, consoleMessage);
+                        ConsoleLogSB.Append(consoleMessage);
                     if (ErrorLogQueue.TryDequeue(out string errorMessage))
-                        File.AppendAllText(ErrorLogFile, errorMessage);
+                        // File.AppendAllText(ErrorLogFile, errorMessage);
+                        ErrorLogSB.Append(errorMessage);
                     if (WarningLogQueue.TryDequeue(out string warningMessage))
-                        File.AppendAllText(WarningLogFile, warningMessage);
+                        // File.AppendAllText(WarningLogFile, warningMessage);
+                        WarningLogSB.Append(warningMessage);
                     if (ResponseLogQueue.TryDequeue(out string responseMessage))
-                        File.AppendAllText(ResponseLogFile, responseMessage);
+                        // File.AppendAllText(ResponseLogFile, responseMessage);
+                        ResponseLogSB.Append(responseMessage);
                     if (PerformanceLogQueue.TryDequeue(out string performanceMessage))
-                        File.AppendAllText(PerformanceLogFile, performanceMessage);
+                        // File.AppendAllText(PerformanceLogFile, performanceMessage);
+                        PerformanceLogSB.Append(performanceMessage);
                 }
             });
+        }
+
+        private void WriteAllLogs()
+        {
+            File.WriteAllText(ConsoleLogFile, ConsoleLogSB.ToString());
+            File.WriteAllText(ErrorLogFile, ErrorLogSB.ToString());
+            File.WriteAllText(WarningLogFile, WarningLogSB.ToString());
+            File.WriteAllText(ResponseLogFile, ResponseLogSB.ToString());
+            File.WriteAllText(PerformanceLogFile, PerformanceLogSB.ToString());
         }
     }
 }

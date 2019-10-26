@@ -15,8 +15,9 @@ namespace Cosmo.Core.Types.CoreTypes
         public int RepetitionsPerEndpoint { get; set; }
         public IList<EndpointProbe> EndpointProbeList { get; set; }
         public IList<int> ProgrammeOfWork { get; set; }
-        public ConcurrentDictionary<string, int> RecordOfWork { get; set; }
+        public ConcurrentDictionary<int, int> RecordOfWork { get; set; }
         public IList<SetupError> Errors { get; set; }
+        private object LockObject { get; set; } = new object();
 
         public TestSchedule()
         {
@@ -24,14 +25,22 @@ namespace Cosmo.Core.Types.CoreTypes
             RepetitionsPerEndpoint = 0;
             EndpointProbeList = new List<EndpointProbe>();
             ProgrammeOfWork = new List<int>();
-            RecordOfWork = new ConcurrentDictionary<string, int>();
+            RecordOfWork = new ConcurrentDictionary<int, int>();
         }
 
         public EndpointProbe GetNextProbe()
         {
-            EndpointProbe probe = EndpointProbeList[ProgrammeOfWork[Progress]];
-            ++Progress;
-            return probe;
+            if (HasBeenCompleted)
+            {
+                return null;
+            }
+
+            lock (LockObject)
+            {
+                EndpointProbe probe = EndpointProbeList[ProgrammeOfWork[Progress]];
+                ++Progress;
+                return probe;
+            }
         }
     }
 }

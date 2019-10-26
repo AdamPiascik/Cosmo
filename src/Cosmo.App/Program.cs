@@ -6,6 +6,7 @@ using Cosmo.Core.Types.EndpointTypes;
 using Cosmo.Controller;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
@@ -17,13 +18,15 @@ namespace Cosmo.App
         {
             Globals.bProgramRunning = true;
 
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
             TestConfig testConfig = ConfigHandler.ConfigureTestParameters(args);
             Globals.LoggingHandler = new LoggingHandler(testConfig.TestName);
             Globals.LoggingHandler.StartLogQueueWatcher();
 
             Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
-            Globals.LoggingHandler.LogConsole($"Cosmo {currentVersion.Major}.{currentVersion.Minor}.{currentVersion.Build}");
+            Globals.LoggingHandler.LogConsole($"\nCosmo {currentVersion.Major}.{currentVersion.Minor}.{currentVersion.Build}\n");
 
             UpdateChecker updateChecker = new UpdateChecker(currentVersion, Environment.CurrentDirectory);
 
@@ -31,26 +34,38 @@ namespace Cosmo.App
 
             if (!bUpdateApp)
             {
-                // Globals.LoggingHandler.LogConsole($"Initialising {testConfig.TestName}...\n");
+                Globals.LoggingHandler.LogConsole($"\nInitialising {testConfig.TestName}...\n");
 
-                // Test test = new Test(testConfig)
-                //                 .SetUpTargetAPI()
-                //                 .SetUpSwaggerDocuments()
-                //                 .SetUpPayloadDictionaries()
-                //                 .SetUpAuthDictionaries()
-                //                 .SetUpSimulatedUsers()
-                //                 .SetUpTestSchedule();
+                Test test = new Test(testConfig)
+                                .SetUpTargetAPI()
+                                .SetUpSwaggerDocuments()
+                                .SetUpPayloadDictionaries()
+                                .SetUpAuthDictionaries()
+                                .SetUpSimulatedUsers()
+                                .SetUpTestSchedule();
 
-                // Globals.LoggingHandler.LogConsole($"Running {testConfig.TestName}...\n");
+                Globals.LoggingHandler.LogConsole("Finished!\n");
+                Globals.LoggingHandler.LogConsole($"\nRunning {testConfig.TestName}...\n");
 
-                // Globals.LoggingHandler.LogConsole(test.TestSchedule.EndpointProbeList.Count.ToString());
+                test.Run();
 
-                // test.Run();
-
-                // ResultsHandler.HandleResultSet(test.ResultSet);
+                test.HandleResultSet();
             }
 
+            Globals.LoggingHandler.LogConsole("Finished!\n");
+
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.ElapsedMilliseconds);
+            stopwatch.Restart();
+
+            Globals.LoggingHandler.LogConsole("\nWriting logs...\n");
+
             Globals.LoggingHandler.WaitForLoggingCompletion();
+
+            Globals.LoggingHandler.LogConsole("Finished!\n");
+
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.ElapsedMilliseconds);
 
             Globals.bProgramRunning = false;
 

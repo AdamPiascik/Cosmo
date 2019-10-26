@@ -62,23 +62,15 @@ namespace Cosmo.Initialiser
             return true;
         }
 
-        public void SetConnectionLimit(TestConfig config)
-        {
-            ServicePointManager
-                .FindServicePoint(TargetApiUrl)
-                .ConnectionLimit = Convert.ToInt32(config.SimulatedUsers * Defaults.ConnectionScaleFactor);
-
-        }
-
         public ApiConnectionFactory CreateApiConnectionFactory(TestConfig config)
         {
             try
             {
                 if (config.UseLocalServer)
-                    TargetApiUrl = new Uri($"http://localhost:{config.LocalPort}");                    
+                    TargetApiUrl = new Uri($"http://localhost:{config.LocalPort}");
                 else
                     TargetApiUrl = new Uri(config.URL);
-                               
+
             }
             catch (Exception ex)
             {

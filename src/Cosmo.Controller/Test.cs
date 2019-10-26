@@ -4,6 +4,7 @@ using Cosmo.Core.Handlers;
 using Cosmo.Core.Types.CoreTypes;
 using Cosmo.Core.Types.EndpointTypes;
 using Cosmo.Initialiser;
+using System;
 using System.Collections.Generic;
 
 namespace Cosmo.Controller
@@ -16,6 +17,7 @@ namespace Cosmo.Controller
         public TestSchedule TestSchedule { get; set; }
         public TestResources TestResources { get; set; }
         public IList<SimulatedUser> SimulatedUserList { get; set; }
+        private Coordinator TestCoordinator { get; set; }
 
         public Test(TestConfig testconfig)
         {
@@ -40,7 +42,6 @@ namespace Cosmo.Controller
             }
 
             ApiConnectionFactory = setup.CreateApiConnectionFactory(Configuration);
-            setup.SetConnectionLimit(Configuration);
 
             if (!setup.bSuccessful)
                 ErrorHandler.InitialisationError(ErrorLevel.Fatal,
@@ -79,6 +80,7 @@ namespace Cosmo.Controller
         public Test SetUpSimulatedUsers()
         {
             SimulatedUserSetup setup = new SimulatedUserSetup();
+            ApiConnectionFactory.SetConnectionLimit(Configuration, TestResources.SwaggerDocument);
             SimulatedUserList = setup.PopulateUserList(Configuration, ApiConnectionFactory);
 
             if (!setup.bSuccessful)
@@ -121,7 +123,7 @@ namespace Cosmo.Controller
 
         public void Run()
         {
-            Coordinator coordinator =
+            TestCoordinator =
                 new Coordinator
                 {
                     TestResources = TestResources,
@@ -130,7 +132,12 @@ namespace Cosmo.Controller
                     ResultSet = new List<ProbeResult>()
                 };
 
-            coordinator.RunTest();
+            TestCoordinator.RunTest();
+        }
+
+        public void HandleResultSet()
+        {
+            TestCoordinator.HandleResultSet();
         }
     }
 }
