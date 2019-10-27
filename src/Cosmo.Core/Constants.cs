@@ -6,7 +6,7 @@ namespace Cosmo.Core.Constants
 {
     public static class ConfigErrorMessages
     {
-        public const string Mismatch_UseAsyncUsersAndSimulatedUsers = 
+        public const string Mismatch_UseAsyncUsersAndLoadTest = 
             "You've turned on async users with a user count of [[Users]]. The load on your API may exceed what you expect; do you want to continue? (Y)es/(N)o/(Q)uit:";
     }
 

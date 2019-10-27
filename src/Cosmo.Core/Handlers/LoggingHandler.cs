@@ -1,6 +1,7 @@
 using CommandLine;
 using Cosmo.Core.Constants;
 using Cosmo.Core.Enums;
+using Cosmo.Core.Config;
 using Cosmo.Core.Types.ErrorTypes;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,12 @@ namespace Cosmo.Core.Handlers
 {
     public class LoggingHandler
     {
+        private bool bLogConsole { get; set; } = true;
+        private bool bLogErrors { get; set; } = true;
+        private bool bLogWarnings { get; set; } = true;
+        private bool bLogResponses { get; set; } = true;
+        private bool bLogPerformance { get; set; } = true;
+
         private string ConsoleLogFile { get; set; }
         private string ErrorLogFile { get; set; }
         private string WarningLogFile { get; set; }
@@ -33,7 +40,7 @@ namespace Cosmo.Core.Handlers
         public ConcurrentQueue<string> ResponseLogQueue { get; set; }
         public ConcurrentQueue<string> PerformanceLogQueue { get; set; }
 
-        public LoggingHandler(string testName)
+        public LoggingHandler(TestConfig config)
         {
             ConsoleLogQueue = new ConcurrentQueue<string>();
             ErrorLogQueue = new ConcurrentQueue<string>();
@@ -41,7 +48,11 @@ namespace Cosmo.Core.Handlers
             ResponseLogQueue = new ConcurrentQueue<string>();
             PerformanceLogQueue = new ConcurrentQueue<string>();
 
-            CreateFilesAndFolders(testName);
+            bLogErrors = config.bLogErrors;
+            bLogWarnings = config.bLogWarnings;
+            bLogResponses = config.bLogResponses;
+
+            CreateFilesAndFolders(config.TestName);
         }
 
 
@@ -56,30 +67,52 @@ namespace Cosmo.Core.Handlers
             ResponseLogFile = $@"{thisTestDir}\{Defaults.ResponseFile}";
             PerformanceLogFile = $@"{thisTestDir}\{Defaults.PerformanceFile}";
 
-            File.WriteAllText(ConsoleLogFile, string.Empty);
-            File.WriteAllText(ErrorLogFile, string.Empty);
-            File.WriteAllText(WarningLogFile, string.Empty);
-            File.WriteAllText(ResponseLogFile, string.Empty);
-            File.WriteAllText(PerformanceLogFile, string.Empty);
+            if (bLogConsole)
+                File.WriteAllText(ConsoleLogFile, string.Empty);
+
+            if (bLogErrors)
+                File.WriteAllText(ErrorLogFile, string.Empty);
+
+            if (bLogWarnings)
+                File.WriteAllText(WarningLogFile, string.Empty);
+
+            if (bLogResponses)
+                File.WriteAllText(ResponseLogFile, string.Empty);
+
+            if (bLogPerformance)
+                File.WriteAllText(PerformanceLogFile, string.Empty);
         }
 
         public void LogConsole(string message)
         {
-            ConsoleLogQueue.Enqueue(message);
-            Console.Write(message);
+            if (bLogConsole)
+            {
+                ConsoleLogQueue.Enqueue(message);
+                Console.Write(message);
+            }
         }
 
-        public void LogError(string message) =>
-            ErrorLogQueue.Enqueue(message);
+        public void LogError(string message)
+        {
+            if (bLogErrors)
+                ErrorLogQueue.Enqueue(message);
+        }
+        public void LogWarning(string message)
+        {
+            if (bLogWarnings)
+                WarningLogQueue.Enqueue(message);
+        }
+        public void LogResponse(string message)
+        {
+            if (bLogResponses)
+                ResponseLogQueue.Enqueue(message);
+        }
 
-        public void LogWarning(string message) =>
-            WarningLogQueue.Enqueue(message);
-
-        public void LogResponse(string message) =>
-            ResponseLogQueue.Enqueue(message);
-
-        public void LogPerformance(string message) =>
-            PerformanceLogQueue.Enqueue(message);
+        public void LogPerformance(string message)
+        {
+            if (bLogPerformance)
+                PerformanceLogQueue.Enqueue(message);
+        }
 
         public async void StartLogQueueWatcher() =>
             await LogQueueWatcher();
@@ -105,19 +138,14 @@ namespace Cosmo.Core.Handlers
                 while (Globals.bProgramRunning)
                 {
                     if (ConsoleLogQueue.TryDequeue(out string consoleMessage))
-                        // File.AppendAllText(ConsoleLogFile, consoleMessage);
                         ConsoleLogSB.Append(consoleMessage);
                     if (ErrorLogQueue.TryDequeue(out string errorMessage))
-                        // File.AppendAllText(ErrorLogFile, errorMessage);
                         ErrorLogSB.Append(errorMessage);
                     if (WarningLogQueue.TryDequeue(out string warningMessage))
-                        // File.AppendAllText(WarningLogFile, warningMessage);
                         WarningLogSB.Append(warningMessage);
                     if (ResponseLogQueue.TryDequeue(out string responseMessage))
-                        // File.AppendAllText(ResponseLogFile, responseMessage);
                         ResponseLogSB.Append(responseMessage);
                     if (PerformanceLogQueue.TryDequeue(out string performanceMessage))
-                        // File.AppendAllText(PerformanceLogFile, performanceMessage);
                         PerformanceLogSB.Append(performanceMessage);
                 }
             });

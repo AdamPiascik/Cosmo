@@ -21,7 +21,7 @@ namespace Cosmo.App
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             TestConfig testConfig = ConfigHandler.ConfigureTestParameters(args);
-            Globals.LoggingHandler = new LoggingHandler(testConfig.TestName);
+            Globals.LoggingHandler = new LoggingHandler(testConfig);
             Globals.LoggingHandler.StartLogQueueWatcher();
 
             Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;

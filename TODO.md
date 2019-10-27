@@ -2,8 +2,6 @@
  * Add wildcards to includes/excludes endpoints
  * TestMethods not working
  * Handler 0 simulated users
- * Default to async users when simulated users = 1
- * Turn off warning/response logs for load tests
  * Error handling for wrong password
  * Make spin-up time settable
 

@@ -11,7 +11,7 @@ namespace Cosmo.Core.Config
     public class TestConfig
     {
         // Customisation
-        public string TestName { get; set; } = DateTime.Now.ToString();
+        public string TestName { get; set; } = $"Cosmo API Test {DateTime.Now.ToString()}";
         public string ProjectName { get; set; }
         public List<string> DataFiles { get; set; }
 
@@ -33,11 +33,15 @@ namespace Cosmo.Core.Config
         public string SwaggerDoc { get; set; } = "v1/doc.json";
 
         // Flags
-        public bool UseAsyncUsers { get; set; }
+        public bool UseAsyncUsers => bLoadTest ? false : true;
         public bool CheckForUpdates { get; set; } = false;
+        public bool bLogResponses => bLoadTest ? false : true;
+        public bool bLogErrors => bLoadTest ? false : true;
+        public bool bLogWarnings => bLoadTest ? false : true;
 
         // Load testing
         public int SimulatedUsers { get; set; } = 1;
+        public bool bLoadTest => SimulatedUsers > 1 ? true : false;
 
         // Config validation
         public IList<ConfigError> Errors { get; set; }
@@ -48,14 +52,14 @@ namespace Cosmo.Core.Config
         }
         public bool HasErrors()
         {
-            if (UseAsyncUsers && SimulatedUsers > 1)
+            if (UseAsyncUsers && bLoadTest)
             {
                 Errors.Add(new ConfigError
                 {
                     Severity = ErrorLevel.PromptWarning,
                     Type = ConfigErrorType.AsyncLoadTesting,
                     Message = 
-                        ConfigErrorMessages.Mismatch_UseAsyncUsersAndSimulatedUsers
+                        ConfigErrorMessages.Mismatch_UseAsyncUsersAndLoadTest
                             .Replace("[[Users]]", SimulatedUsers.ToString())
                 });
             }
