@@ -28,10 +28,15 @@ namespace Cosmo.Controller
             Globals.LoggingHandler.LogPerformance(Defaults.PerformanceLogHeader);
             RaiseNewFreeUser += AssignProbe;
 
+            int endpointsToHit = TestSchedule.EndpointProbeList.Count;
+
             // initially assign one probe to each user
             foreach (SimulatedUser user in SimulatedUserList)
             {
+                user.EndpointsToHit = endpointsToHit;
+                user.bHasStartedWork = true;
                 AssignProbe(user);
+                Thread.Sleep(Defaults.UserStartIntervalInMilliseconds);
             }
 
             while (!TestSchedule.HasBeenCompleted)
@@ -54,6 +59,10 @@ namespace Cosmo.Controller
             if (user.bHasFinishedWork)
                 return;
 
+            user.NumberOfConcurrentUsers = 
+                SimulatedUserList.Where(x => 
+                    x.bHasStartedWork && !x.bHasFinishedWork ).Count();
+
             EndpointProbe probe = TestSchedule.GetNextProbe();
 
             await Task.Run(async () =>
@@ -71,17 +80,6 @@ namespace Cosmo.Controller
                     RaiseNewFreeUser(user);
                 }
             });
-        }
-
-        private void UpdateRecordOfWork(SimulatedUser user)
-        {
-            TestSchedule.RecordOfWork
-                .AddOrUpdate(user.UserID, 1, ((key, val) => ++val));
-
-            if (TestSchedule.RecordOfWork[user.UserID] == TestSchedule.EndpointProbeList.Count)
-            {
-                user.bHasFinishedWork = true;
-            }
         }
     }
 }

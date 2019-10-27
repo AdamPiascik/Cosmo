@@ -34,7 +34,7 @@ namespace Cosmo.App
 
             if (!bUpdateApp)
             {
-                Globals.LoggingHandler.LogConsole($"\nInitialising {testConfig.TestName}...\n");
+                Globals.LoggingHandler.LogConsole($"\nInitialising {testConfig.TestName}...");
 
                 Test test = new Test(testConfig)
                                 .SetUpTargetAPI()
@@ -44,8 +44,8 @@ namespace Cosmo.App
                                 .SetUpSimulatedUsers()
                                 .SetUpTestSchedule();
 
-                Globals.LoggingHandler.LogConsole("Finished!\n");
-                Globals.LoggingHandler.LogConsole($"\nRunning {testConfig.TestName}...\n");
+                Globals.LoggingHandler.LogConsole("finished!\n");
+                Globals.LoggingHandler.LogConsole($"\nRunning {testConfig.TestName}...");
 
                 test.Run();
 
@@ -56,16 +56,12 @@ namespace Cosmo.App
 
             stopwatch.Stop();
             Console.WriteLine(stopwatch.ElapsedMilliseconds);
-            stopwatch.Restart();
 
-            Globals.LoggingHandler.LogConsole("\nWriting logs...\n");
+            Globals.LoggingHandler.LogConsole("\nWriting logs...");
 
             Globals.LoggingHandler.WaitForLoggingCompletion();
 
             Globals.LoggingHandler.LogConsole("Finished!\n");
-
-            stopwatch.Stop();
-            Console.WriteLine(stopwatch.ElapsedMilliseconds);
 
             Globals.bProgramRunning = false;
 

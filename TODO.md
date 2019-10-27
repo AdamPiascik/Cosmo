@@ -1,22 +1,19 @@
-## Updater
-
-## Command Line Options
-
 ## Config and Startup
  * Add wildcards to includes/excludes endpoints
  * TestMethods not working
  * Handler 0 simulated users
  * Default to async users when simulated users = 1
  * Turn off warning/response logs for load tests
-
-## Initialiser
+ * Error handling for wrong password
+ * Make spin-up time settable
 
 ## Logging
- * Add severe warning type that requires user intervention (async users)
- * Improve performance of logging
+ * Add severe warning type that requires user intervention (async users, wrong password)
+ * Add test summary message
 
 ## Graphing
- * Graph endpoint vs. response time
+ * Graph endpoint vs. average response time
+ * Graph endpoint response time over time
  * Graph endpoint response time vs number of users
 
 ## Examples
@@ -25,6 +22,11 @@
  * Script to increment number of users
 
 ## Load-testing functionality
- * Improve performance of recording work (move to users)
+ * Check synchronisation of users
+ * Work out best spin-up procedure
  * Get 100 users to work
+ * Handle timed-out requests
  * Multiple synchronous users (max value?)
+
+## Deployment
+ * Write deployment scripts

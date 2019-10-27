@@ -55,7 +55,6 @@ namespace Cosmo.Initialiser
                 schedule.RepetitionsPerEndpoint = config.SimulatedUsers;
                 schedule.EndpointProbeList = GetEndpointProbeList(resources, config);
                 schedule.ProgrammeOfWork = GetProgrammeOfWork(schedule.EndpointProbeList.Count, schedule.RepetitionsPerEndpoint);
-                schedule.RecordOfWork = InitialiseRecordOfWork(config.SimulatedUsers);
 
                 return schedule;
             }
@@ -112,22 +111,6 @@ namespace Cosmo.Initialiser
             list = list.Select(x => x % numberOfProbes).ToList();
 
             return list;
-        }
-
-        private ConcurrentDictionary<int, int> InitialiseRecordOfWork(int numberOfUsers)
-        {
-            ConcurrentDictionary<int, int> dict = new ConcurrentDictionary<int, int>();
-
-            Parallel.For(
-                0,
-                numberOfUsers,
-                new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
-                userID =>
-                {
-                    dict.TryAdd(userID, 0);
-                });
-
-            return dict;
         }
 
         private string GetEndpointAuthToken(string endpoint, Dictionary<string, string> authDictionary)

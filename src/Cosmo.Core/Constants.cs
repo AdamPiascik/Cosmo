@@ -50,14 +50,15 @@ namespace Cosmo.Core.Constants
         public const string ResponseFile = @"responses.log";
         public const string PerformanceFile = @"performance.log";
         public const double ConnectionScaleFactor = 1.1;
-        public const int RequestTimeoutInSeconds = 10;
+        public const int RequestTimeoutInSeconds = 30;
         public static IList<string> HttpMethods =
             new List<string>
             {
                 "Get", "Post"
             };
         public const string PerformanceLogHeader =
-            "Endpoint,Method,UserID,ConcurrentUsers,ResponseStatusCode,RoundTripTime";
+            "Endpoint,Method,UserID,ConcurrentUsers,ResponseStatusCode,RoundTripTime\n";
+        public static int UserStartIntervalInMilliseconds = 25;
     }
 
     public static class Globals
