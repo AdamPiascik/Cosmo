@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <NoWarn>$(NoWarn);NU1605</NoWarn>
+    <AssemblyName>CosmoGraph</AssemblyName>
+    <Author>Adam Piascik</Author>
+    <Product>Cosmo Graph</Product>
+    <Description>A tool for graphing Cosmo performance logfiles</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="1.68.0" />
+  </ItemGroup>
+
+</Project>

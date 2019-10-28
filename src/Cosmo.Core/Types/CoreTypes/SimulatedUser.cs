@@ -61,7 +61,7 @@ namespace Cosmo.Core.Types.CoreTypes
                     RoundTripTime = timer.ElapsedMilliseconds                    
                 };
             }
-            catch (TaskCanceledException ex)
+            catch (TaskCanceledException)
             {                
                 return new ProbeResult
                 {

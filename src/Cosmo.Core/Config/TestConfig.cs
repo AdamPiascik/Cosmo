@@ -42,6 +42,7 @@ namespace Cosmo.Core.Config
         // Load testing
         public int SimulatedUsers { get; set; } = 1;
         public bool bLoadTest => SimulatedUsers > 1 ? true : false;
+        public double SpinUpTime { get; set; } = Defaults.SpinUpTime;
 
         // Config validation
         public IList<ConfigError> Errors { get; set; }

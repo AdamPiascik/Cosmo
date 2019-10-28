@@ -126,7 +126,6 @@ namespace Cosmo.Controller
             TestCoordinator =
                 new Coordinator
                 {
-                    TestResources = TestResources,
                     TestSchedule = TestSchedule,
                     SimulatedUserList = SimulatedUserList,
                     ResultSet = new List<ProbeResult>()

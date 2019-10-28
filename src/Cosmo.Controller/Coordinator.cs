@@ -15,9 +15,7 @@ namespace Cosmo.Controller
 {
     public class Coordinator
     {
-        public Task TestStatus { get; set; }
         public TestSchedule TestSchedule { get; set; }
-        public TestResources TestResources { get; set; }
         public IList<SimulatedUser> SimulatedUserList { get; set; }
         public IList<ProbeResult> ResultSet { get; set; }
         private delegate void FreeUserHandler(SimulatedUser user);
@@ -36,7 +34,7 @@ namespace Cosmo.Controller
                 user.EndpointsToHit = endpointsToHit;
                 user.bHasStartedWork = true;
                 AssignProbe(user);
-                Thread.Sleep(Defaults.UserStartIntervalInMilliseconds);
+                Thread.Sleep(TestSchedule.SpinUpDelayInMilliseconds);
             }
 
             while (SimulatedUserList

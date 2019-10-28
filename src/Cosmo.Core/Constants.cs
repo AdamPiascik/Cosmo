@@ -59,9 +59,9 @@ namespace Cosmo.Core.Constants
             };
         public const string PerformanceLogHeader =
             "Endpoint,Method,UserID,ConcurrentUsers,ResponseStatusCode,RoundTripTime\n";
-        public static int UserStartIntervalInMilliseconds = 25;
         public const string TestSummaryMessage = 
             "[[Endpoints]] endpoints were tested: there were [[Successes]] successes and [[Failures]] failures. See the relevant log fle for more information.\n";
+        public static double SpinUpTime = 2.5;
     }
 
     public static class Globals

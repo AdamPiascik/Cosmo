@@ -1,9 +1,10 @@
 ## Config and Startup
  * Add wildcards to includes/excludes endpoints
+ * Handle multiple logins
+ * Check all wildcard parsing
  * TestMethods not working
  * Handler 0 simulated users
  * Error handling for wrong password
- * Make spin-up time settable
 
 ## Logging
  * Add severe warning type that requires user intervention (async users, wrong password)
@@ -24,7 +25,6 @@
  * Check all endpoints are being hit
  * Check synchronisation of users
  * Work out best spin-up procedure
- * Get 100 users to work
  * Multiple synchronous users (max value?)
 
 ## Deployment

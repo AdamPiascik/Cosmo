@@ -11,6 +11,7 @@ namespace Cosmo.Core.Types.CoreTypes
     {
         private int Progress { get; set; }
         private int NumberOfProbes => EndpointProbeList.Count;
+        public int SpinUpDelayInMilliseconds { get; set; }
         public bool HasBeenCompleted => Progress == ProgrammeOfWork.Count ? true : false;
         public int RepetitionsPerEndpoint { get; set; }
         public IList<EndpointProbe> EndpointProbeList { get; set; }

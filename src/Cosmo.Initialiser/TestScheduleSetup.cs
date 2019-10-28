@@ -55,6 +55,7 @@ namespace Cosmo.Initialiser
                 schedule.RepetitionsPerEndpoint = config.SimulatedUsers;
                 schedule.EndpointProbeList = GetEndpointProbeList(resources, config);
                 schedule.ProgrammeOfWork = GetProgrammeOfWork(schedule.EndpointProbeList.Count, schedule.RepetitionsPerEndpoint);
+                schedule.SpinUpDelayInMilliseconds = (int) ((config.SpinUpTime * 1000) / config.SimulatedUsers);
 
                 return schedule;
             }
