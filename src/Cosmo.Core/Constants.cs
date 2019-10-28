@@ -49,6 +49,7 @@ namespace Cosmo.Core.Constants
         public const string WarningsFile = @"warnings.log";
         public const string ResponseFile = @"responses.log";
         public const string PerformanceFile = @"performance.log";
+        public const string FailedEndpointsFile = @"failed-endpoints.log";
         public const double ConnectionScaleFactor = 1.1;
         public const int RequestTimeoutInSeconds = 30;
         public static IList<string> HttpMethods =
@@ -59,6 +60,8 @@ namespace Cosmo.Core.Constants
         public const string PerformanceLogHeader =
             "Endpoint,Method,UserID,ConcurrentUsers,ResponseStatusCode,RoundTripTime\n";
         public static int UserStartIntervalInMilliseconds = 25;
+        public const string TestSummaryMessage = 
+            "[[Endpoints]] endpoints were tested: there were [[Successes]] successes and [[Failures]] failures. See the relevant log fle for more information.\n";
     }
 
     public static class Globals

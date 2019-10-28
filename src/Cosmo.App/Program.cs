@@ -32,6 +32,8 @@ namespace Cosmo.App
 
             bool bUpdateApp = updateChecker.Execute();
 
+            ResultsSummary resultsSummary = new ResultsSummary();
+
             if (!bUpdateApp)
             {
                 Globals.LoggingHandler.LogConsole($"\nInitialising {testConfig.TestName}...");
@@ -49,10 +51,18 @@ namespace Cosmo.App
 
                 test.Run();
 
-                test.HandleResultSet();
+                resultsSummary = test.HandleResultSet();
             }
 
-            Globals.LoggingHandler.LogConsole("Finished!\n");
+            Globals.LoggingHandler.LogConsole("finished!\n\n");
+
+            Globals.LoggingHandler.LogConsole
+                (
+                    Defaults.TestSummaryMessage
+                        .Replace("[[Endpoints]]", resultsSummary.EndpointsTested.ToString())
+                        .Replace("[[Successes]]", resultsSummary.EndpointsPassed.ToString())
+                        .Replace("[[Failures]]", resultsSummary.EndpointsFailed.ToString())
+                );
 
             stopwatch.Stop();
             Console.WriteLine(stopwatch.ElapsedMilliseconds);
@@ -61,7 +71,7 @@ namespace Cosmo.App
 
             Globals.LoggingHandler.WaitForLoggingCompletion();
 
-            Globals.LoggingHandler.LogConsole("Finished!\n");
+            Globals.LoggingHandler.LogConsole("finished!\n");
 
             Globals.bProgramRunning = false;
 

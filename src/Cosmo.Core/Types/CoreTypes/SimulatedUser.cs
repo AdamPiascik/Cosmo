@@ -19,7 +19,7 @@ namespace Cosmo.Core.Types.CoreTypes
         public bool bSavePerformanceData { get; set; }
         public bool bSaveResponses { get; set; }
         public bool bAsyncUser { get; set; }
-        private int Progress { get; set; }
+        public int Progress { get; set; }
         public int EndpointsToHit { get; set; }
         public bool bHasStartedWork { get; set; } = false;
         public bool bHasFinishedWork => Progress == EndpointsToHit ? true : false;
@@ -48,32 +48,35 @@ namespace Cosmo.Core.Types.CoreTypes
                 HttpResponseMessage response = TargetAPI.SendAsync(request).Result;
                 timer.Stop();
 
-                ++Progress;
-
-                string resultsString =
-                    $"Test of {probe.Endpoint}:\n"
-                    + $"Method: {probe.Method}\n"
-                    + $"Payload: {request.Content.ReadAsStringAsync().Result}\n"
-                    + $"Response status code: {(int)response.StatusCode} {response.StatusCode}\n"
-                    + $"Round-trip time: {timer.ElapsedMilliseconds} ms\n\n";
-
-                string performanceString =
-                    $"{probe.Endpoint},{probe.Method},{UserID},{NumberOfConcurrentUsers},{(int)response.StatusCode},{timer.ElapsedMilliseconds}\n";
-
                 return new ProbeResult
                 {
-                    ResultsString = resultsString,
-                    PerformanceString = performanceString
+                    Endpoint = probe.Endpoint,
+                    Method = probe.Method.Method,
+                    RequestPayload = request.Content.ReadAsStringAsync().Result,
+                    UserID = UserID,
+                    ConcurrentUsersAtRequestTime = NumberOfConcurrentUsers,
+                    bSuccessResponse = response.IsSuccessStatusCode ? true : false,
+                    StatusCode = (int)response.StatusCode,
+                    StatusMessage = response.StatusCode.ToString(),
+                    RoundTripTime = timer.ElapsedMilliseconds                    
                 };
             }
-            catch (WebException ex)
-            {
-                Console.WriteLine(ex.Message);
+            catch (TaskCanceledException ex)
+            {                
                 return new ProbeResult
                 {
-                    ResultsString = string.Empty,
-                    PerformanceString = string.Empty
+                    Endpoint = probe.Endpoint,
+                    Method = probe.Method.Method,
+                    RequestPayload = request.Content.ReadAsStringAsync().Result,
+                    UserID = UserID,
+                    ConcurrentUsersAtRequestTime = NumberOfConcurrentUsers,
+                    bRequestTimeout = true,
+                    StatusMessage = $"Client-side request timeout (longer than {Defaults.RequestTimeoutInSeconds})"
                 };
+            }
+            finally
+            {
+                ++Progress;
             }
         }
     }

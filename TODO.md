@@ -7,7 +7,8 @@
 
 ## Logging
  * Add severe warning type that requires user intervention (async users, wrong password)
- * Add test summary message
+ * Add failed endpoints log
+ * Amalgamate errors + warnings
 
 ## Graphing
  * Graph endpoint vs. average response time
@@ -20,11 +21,12 @@
  * Script to increment number of users
 
 ## Load-testing functionality
+ * Check all endpoints are being hit
  * Check synchronisation of users
  * Work out best spin-up procedure
  * Get 100 users to work
- * Handle timed-out requests
  * Multiple synchronous users (max value?)
 
 ## Deployment
  * Write deployment scripts
+ * Release 1.0!

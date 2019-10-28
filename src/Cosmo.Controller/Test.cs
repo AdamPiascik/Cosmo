@@ -135,9 +135,16 @@ namespace Cosmo.Controller
             TestCoordinator.RunTest();
         }
 
-        public void HandleResultSet()
+        public ResultsSummary HandleResultSet()
         {
-            TestCoordinator.HandleResultSet();
+            return TestCoordinator.HandleResultSet();
         }
+    }
+
+    public class ResultsSummary
+    {
+        public int EndpointsTested { get; set; }
+        public int EndpointsPassed { get; set; }
+        public int EndpointsFailed { get; set; }
     }
 }

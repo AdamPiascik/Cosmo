@@ -39,19 +39,29 @@ namespace Cosmo.Controller
                 Thread.Sleep(Defaults.UserStartIntervalInMilliseconds);
             }
 
-            while (!TestSchedule.HasBeenCompleted)
+            while (SimulatedUserList
+                    .Where(x => !x.bHasFinishedWork)
+                    .Any())
             {
+                // Console.WriteLine($"Progress: {SimulatedUserList.First().Progress}");
                 Thread.Sleep(50);
             };
         }
 
-        public void HandleResultSet()
+        public ResultsSummary HandleResultSet()
         {
             foreach (ProbeResult result in ResultSet)
             {
                 Globals.LoggingHandler.LogResponse(result.ResultsString);
                 Globals.LoggingHandler.LogPerformance(result.PerformanceString);
             }
+
+            return new ResultsSummary
+            {
+                EndpointsTested = ResultSet.Count,
+                EndpointsPassed = ResultSet.Where(x => x.bSuccessResponse).Count(),
+                EndpointsFailed = ResultSet.Where(x => !x.bSuccessResponse).Count(),                
+            };
         }
 
         private async void AssignProbe(SimulatedUser user)

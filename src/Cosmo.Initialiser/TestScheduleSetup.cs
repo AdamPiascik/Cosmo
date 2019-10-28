@@ -107,7 +107,7 @@ namespace Cosmo.Initialiser
         {
             int listLength = numberOfProbes * repetitionsPerEndpoint;
             var rng = new Random();
-            IList<int> list = Enumerable.Range(0, listLength - 1).OrderBy(x => rng.Next()).ToList();
+            IList<int> list = Enumerable.Range(0, listLength).OrderBy(x => rng.Next()).ToList();
             list = list.Select(x => x % numberOfProbes).ToList();
 
             return list;
