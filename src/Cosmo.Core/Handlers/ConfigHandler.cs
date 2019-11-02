@@ -5,7 +5,9 @@ using Cosmo.Core.Constants;
 using Cosmo.Core.Enums;
 using Cosmo.Core.Types.ErrorTypes;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Cosmo.Core.Handlers
 {
@@ -58,6 +60,9 @@ namespace Cosmo.Core.Handlers
                     Message = ex.Message
                 });
             }
+
+            if(testConfig.TestMethods == null || !testConfig.TestMethods.Any())
+                testConfig.TestMethods = new List<string>() { "GET", "POST" };
 
             if (testConfig.HasErrors())
                 ErrorHandler.InvalidTestConfig(testConfig.Errors);

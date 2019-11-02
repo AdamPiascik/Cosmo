@@ -52,6 +52,9 @@ namespace Cosmo.Controller
             {
                 Globals.LoggingHandler.LogResponse(result.ResultsString);
                 Globals.LoggingHandler.LogPerformance(result.PerformanceString);
+
+                if (!result.bSuccessResponse)
+                    Globals.LoggingHandler.LogFailedEndpoint(result.ResultsString);
             }
 
             return new ResultsSummary

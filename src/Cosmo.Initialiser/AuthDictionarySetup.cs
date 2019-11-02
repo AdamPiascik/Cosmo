@@ -41,18 +41,12 @@ namespace Cosmo.Initialiser
 
                     foreach (string endpoint in authItem.TargetEndpoints)
                     {
-                        dict.Add(ConvertToRegex(endpoint), token);
+                        dict.Add(SanitiseRegex(endpoint), token);
                     }
                 }
             }
 
             return dict;
-        }
-
-        private string ConvertToRegex(string toConvert)
-        {
-            return toConvert
-                    .Replace("*", ".*");
         }
 
         public class AuthLogin
@@ -65,6 +59,13 @@ namespace Cosmo.Initialiser
                 Username = username;
                 Password = password;
             }
+        }
+
+        private string SanitiseRegex(string input)
+        {
+            return input
+                .Replace(@"\", @"\\")
+                .ToLower();
         }
     }
 }

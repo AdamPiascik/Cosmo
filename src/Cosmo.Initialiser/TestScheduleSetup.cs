@@ -11,7 +11,7 @@ using System.Collections.Concurrent;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
-using System.Threading;
+using System.Web;
 using System.Threading.Tasks;
 
 namespace Cosmo.Initialiser
@@ -65,12 +65,16 @@ namespace Cosmo.Initialiser
         {
             BlockingCollection<EndpointProbe> list = new BlockingCollection<EndpointProbe>();
 
+            var test = Defaults.HttpMethods.Intersect(config.TestMethods, StringComparer.OrdinalIgnoreCase);
+
             Parallel.ForEach(
                 resources.SwaggerDocument.Paths,
                 new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
                 path =>
                 {
-                    Parallel.ForEach(
+                    if (CheckIfPathAllowed(path.Key, config))
+                    {
+                        Parallel.ForEach(
                         Defaults.HttpMethods.Intersect(config.TestMethods, StringComparer.OrdinalIgnoreCase),
                         new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
                         method =>
@@ -95,13 +99,32 @@ namespace Cosmo.Initialiser
                                     }
                                 );
                             }
-                        }
-                    );
+                        });
+                    }
                 });
             
             list.CompleteAdding();
 
             return list.ToList();
+        }
+
+        private bool CheckIfPathAllowed(string path, TestConfig config)
+        {
+            foreach(string item in config.Include)
+            {
+                Regex regex = new Regex(item);
+                if (!regex.Match(path).Success)
+                    return false;
+            }
+
+            foreach(string item in config.Exclude)
+            {
+                Regex regex = new Regex(item);
+                if (regex.Match(path).Success)
+                    return false;
+            }
+
+            return true;
         }
 
         private IList<int> GetProgrammeOfWork(int numberOfProbes, int repetitionsPerEndpoint)
@@ -122,7 +145,7 @@ namespace Cosmo.Initialiser
             foreach (KeyValuePair<string, string> item in authDictionary)
             {
                 Regex regex = new Regex(item.Key);
-                if (regex.Match(endpoint).Success)
+                if (regex.Match(endpoint.ToLower()).Success)
                 {
                     return item.Value;
                 }

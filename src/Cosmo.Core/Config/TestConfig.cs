@@ -29,7 +29,6 @@ namespace Cosmo.Core.Config
         public List<string> Include { get; set; } = new List<string>();
         public List<string> Exclude { get; set; }  = new List<string>();
         public List<string> TestMethods { get; set; }
-            = new List<string> { "GET", "POST" };
         public string SwaggerDoc { get; set; } = "v1/doc.json";
 
         // Flags
@@ -37,7 +36,7 @@ namespace Cosmo.Core.Config
         public bool CheckForUpdates { get; set; } = false;
         public bool bLogResponses => bLoadTest ? false : true;
         public bool bLogErrors => bLoadTest ? false : true;
-        public bool bLogWarnings => bLoadTest ? false : true;
+        public bool bLogFailedEndpoints => bLoadTest ? false : true;
 
         // Load testing
         public int SimulatedUsers { get; set; } = 1;
@@ -53,6 +52,8 @@ namespace Cosmo.Core.Config
         }
         public bool HasErrors()
         {
+            Console.WriteLine(UseAsyncUsers);
+            
             if (UseAsyncUsers && bLoadTest)
             {
                 Errors.Add(new ConfigError
@@ -61,6 +62,18 @@ namespace Cosmo.Core.Config
                     Type = ConfigErrorType.AsyncLoadTesting,
                     Message = 
                         ConfigErrorMessages.Mismatch_UseAsyncUsersAndLoadTest
+                            .Replace("[[Users]]", SimulatedUsers.ToString())
+                });
+            }
+
+            if (SimulatedUsers <= 0)
+            {
+                Errors.Add(new ConfigError
+                {
+                    Severity = ErrorLevel.Fatal,
+                    Type = ConfigErrorType.InvalidConfiguration,
+                    Message = 
+                        ConfigErrorMessages.InvalidNumberOfUsers
                             .Replace("[[Users]]", SimulatedUsers.ToString())
                 });
             }

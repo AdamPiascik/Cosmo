@@ -18,25 +18,25 @@ namespace Cosmo.Core.Handlers
     {
         private bool bLogConsole { get; set; } = true;
         private bool bLogErrors { get; set; } = true;
-        private bool bLogWarnings { get; set; } = true;
+        private bool bLogFailedEndpoints { get; set; } = true;
         private bool bLogResponses { get; set; } = true;
         private bool bLogPerformance { get; set; } = true;
 
         private string ConsoleLogFile { get; set; }
         private string ErrorLogFile { get; set; }
-        private string WarningLogFile { get; set; }
+        private string FailedEndpointsLogFile { get; set; }
         private string ResponseLogFile { get; set; }
         private string PerformanceLogFile { get; set; }
 
         private StringBuilder ConsoleLogSB = new StringBuilder();
         private StringBuilder ErrorLogSB = new StringBuilder();
-        private StringBuilder WarningLogSB = new StringBuilder();
+        private StringBuilder FailedEndpointsLogSB = new StringBuilder();
         private StringBuilder ResponseLogSB = new StringBuilder();
         private StringBuilder PerformanceLogSB = new StringBuilder();
 
         public ConcurrentQueue<string> ConsoleLogQueue { get; set; }
         public ConcurrentQueue<string> ErrorLogQueue { get; set; }
-        public ConcurrentQueue<string> WarningLogQueue { get; set; }
+        public ConcurrentQueue<string> FailedEndpointsLogQueue { get; set; }
         public ConcurrentQueue<string> ResponseLogQueue { get; set; }
         public ConcurrentQueue<string> PerformanceLogQueue { get; set; }
 
@@ -44,12 +44,12 @@ namespace Cosmo.Core.Handlers
         {
             ConsoleLogQueue = new ConcurrentQueue<string>();
             ErrorLogQueue = new ConcurrentQueue<string>();
-            WarningLogQueue = new ConcurrentQueue<string>();
+            FailedEndpointsLogQueue = new ConcurrentQueue<string>();
             ResponseLogQueue = new ConcurrentQueue<string>();
             PerformanceLogQueue = new ConcurrentQueue<string>();
 
             bLogErrors = config.bLogErrors;
-            bLogWarnings = config.bLogWarnings;
+            bLogFailedEndpoints = config.bLogFailedEndpoints;
             bLogResponses = config.bLogResponses;
 
             CreateFilesAndFolders(config.TestName);
@@ -63,7 +63,7 @@ namespace Cosmo.Core.Handlers
 
             ConsoleLogFile = $@"{thisTestDir}\{Defaults.ConsoleLogFile}";
             ErrorLogFile = $@"{thisTestDir}\{Defaults.ErrorsFile}";
-            WarningLogFile = $@"{thisTestDir}\{Defaults.WarningsFile}";
+            FailedEndpointsLogFile = $@"{thisTestDir}\{Defaults.FailedEndpointsFile}";
             ResponseLogFile = $@"{thisTestDir}\{Defaults.ResponseFile}";
             PerformanceLogFile = $@"{thisTestDir}\{Defaults.PerformanceFile}";
 
@@ -73,8 +73,8 @@ namespace Cosmo.Core.Handlers
             if (bLogErrors)
                 File.WriteAllText(ErrorLogFile, string.Empty);
 
-            if (bLogWarnings)
-                File.WriteAllText(WarningLogFile, string.Empty);
+            if (bLogFailedEndpoints)
+                File.WriteAllText(FailedEndpointsLogFile, string.Empty);
 
             if (bLogResponses)
                 File.WriteAllText(ResponseLogFile, string.Empty);
@@ -97,10 +97,10 @@ namespace Cosmo.Core.Handlers
             if (bLogErrors)
                 ErrorLogQueue.Enqueue(message);
         }
-        public void LogWarning(string message)
+        public void LogFailedEndpoint(string message)
         {
-            if (bLogWarnings)
-                WarningLogQueue.Enqueue(message);
+            if (bLogFailedEndpoints)
+                FailedEndpointsLogQueue.Enqueue(message);
         }
         public void LogResponse(string message)
         {
@@ -121,7 +121,7 @@ namespace Cosmo.Core.Handlers
         {
             while (ConsoleLogQueue.Any()
                    || ErrorLogQueue.Any()
-                   || WarningLogQueue.Any()
+                   || FailedEndpointsLogQueue.Any()
                    || ResponseLogQueue.Any()
                    || PerformanceLogQueue.Any())
             {
@@ -141,8 +141,8 @@ namespace Cosmo.Core.Handlers
                         ConsoleLogSB.Append(consoleMessage);
                     if (ErrorLogQueue.TryDequeue(out string errorMessage))
                         ErrorLogSB.Append(errorMessage);
-                    if (WarningLogQueue.TryDequeue(out string warningMessage))
-                        WarningLogSB.Append(warningMessage);
+                    if (FailedEndpointsLogQueue.TryDequeue(out string failedEndpointsMessage))
+                        FailedEndpointsLogSB.Append(failedEndpointsMessage);
                     if (ResponseLogQueue.TryDequeue(out string responseMessage))
                         ResponseLogSB.Append(responseMessage);
                     if (PerformanceLogQueue.TryDequeue(out string performanceMessage))
@@ -155,7 +155,7 @@ namespace Cosmo.Core.Handlers
         {
             File.WriteAllText(ConsoleLogFile, ConsoleLogSB.ToString());
             File.WriteAllText(ErrorLogFile, ErrorLogSB.ToString());
-            File.WriteAllText(WarningLogFile, WarningLogSB.ToString());
+            File.WriteAllText(FailedEndpointsLogFile, FailedEndpointsLogSB.ToString());
             File.WriteAllText(ResponseLogFile, ResponseLogSB.ToString());
             File.WriteAllText(PerformanceLogFile, PerformanceLogSB.ToString());
         }

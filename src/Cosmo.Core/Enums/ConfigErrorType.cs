@@ -5,6 +5,7 @@ namespace Cosmo.Core.Enums
         JsonParser,
         AsyncLoadTesting,
         
-        InvalidCombination
+        InvalidCombination,
+        InvalidConfiguration
     }
 }

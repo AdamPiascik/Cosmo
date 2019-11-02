@@ -17,10 +17,10 @@ namespace Cosmo.Core.Handlers
 
             if (nonFatalErrors.Any())
             {
-                Globals.LoggingHandler.LogWarning("There were non-fatal errors during configuration:\n");
+                Globals.LoggingHandler.LogError("There were non-fatal errors during configuration:\n");
                 foreach (ConfigError error in nonFatalErrors)
                 {
-                    Globals.LoggingHandler.LogWarning($"\t{error.Severity} ({error.Type}): {error.Message}\n");
+                    Globals.LoggingHandler.LogError($"\t{error.Severity} ({error.Type}): {error.Message}\n");
                 }
             }
 
@@ -55,10 +55,10 @@ namespace Cosmo.Core.Handlers
 
             if (nonFatalErrors.Any())
             {
-                Globals.LoggingHandler.LogWarning("There were non-fatal errors initialising the test:\n");
+                Globals.LoggingHandler.LogError("There were non-fatal errors initialising the test:\n");
                 foreach (SetupError error in nonFatalErrors)
                 {
-                    Globals.LoggingHandler.LogWarning($"\t{error.Severity} ({error.Type}): {error.Message}\n");
+                    Globals.LoggingHandler.LogError($"\t{error.Severity} ({error.Type}): {error.Message}\n");
                 }
             }
 

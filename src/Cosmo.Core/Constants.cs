@@ -8,6 +8,8 @@ namespace Cosmo.Core.Constants
     {
         public const string Mismatch_UseAsyncUsersAndLoadTest = 
             "You've turned on async users with a user count of [[Users]]. The load on your API may exceed what you expect; do you want to continue? (Y)es/(N)o/(Q)uit:";
+        public const string InvalidNumberOfUsers = 
+            "Number of simulated users must be greater than zero. Requested number of simulated users: [[Users]]";
     }
 
     public static class ProbeErrorMessages
@@ -46,7 +48,6 @@ namespace Cosmo.Core.Constants
         public const string ConfigFile = @".\cosmo.config.json";
         public const string ConsoleLogFile = @"console.log";
         public const string ErrorsFile = @"errors.log";
-        public const string WarningsFile = @"warnings.log";
         public const string ResponseFile = @"responses.log";
         public const string PerformanceFile = @"performance.log";
         public const string FailedEndpointsFile = @"failed-endpoints.log";
@@ -60,7 +61,7 @@ namespace Cosmo.Core.Constants
         public const string PerformanceLogHeader =
             "Endpoint,Method,UserID,ConcurrentUsers,ResponseStatusCode,RoundTripTime\n";
         public const string TestSummaryMessage = 
-            "[[Endpoints]] endpoints were tested: there were [[Successes]] successes and [[Failures]] failures. See the relevant log fle for more information.\n";
+            "[[Endpoints]] endpoints were tested: there were [[Successes]] successes and [[Failures]] failures. See the relevant log file for more information.\n";
         public static double SpinUpTime = 2.5;
     }
 
